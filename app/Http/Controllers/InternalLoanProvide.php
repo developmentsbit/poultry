@@ -124,17 +124,6 @@ class InternalLoanProvide extends Controller
         return redirect()->back();
     }
 
-    public function getintloanRegisterdue_loan(Request $request)
-    {
-        $recived = internal_loan_recived::where('register_id',$request->register_id)->sum('amount');
-
-        $paid = internal_loan_provide::where('register_id',$request->register_id)->sum('amount');
-
-        $result = $recived - $paid;
-
-        return $result;
-    }
-
     public function retrive_intloan_provide($id)
     {
         internal_loan_provide::where('id',$id)->restore();

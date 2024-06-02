@@ -123,6 +123,17 @@ class InternalLoanRecived extends Controller
         return redirect()->back();
     }
 
+    public function getintloanRegisterdue_loan(Request $request)
+    {
+        $recived = internal_loan_recived::where('register_id',$request->register_id)->sum('amount');
+
+        $paid = internal_loan_provide::where('register_id',$request->register_id)->sum('amount');
+
+        $result = $recived - $paid;
+
+        return $result;
+    }
+
     public function retrive_intloan_recived($id)
     {
         internal_loan_recived::where('id',$id)->restore();

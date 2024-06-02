@@ -477,9 +477,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/retrive_intloan_recived/{id}', [InternalLoanRecived::class, 'retrive_intloan_recived']);
     Route::get('/delete_intloan_recived/{id}', [InternalLoanRecived::class, 'delete_intloan_recived']);
+    Route::post('/getintloanRegisterdue_loan', [InternalLoanRecived::class, 'getintloanRegisterdue_loan']);
 
 
-    Route::post('/getintloanRegisterdue_loan', [InternalLoanProvide::class, 'getintloanRegisterdue_loan']);
     Route::get('/retrive_intloan_provide/{id}', [InternalLoanProvide::class, 'retrive_intloan_provide']);
     Route::get('/delete_intloan_provide/{id}', [InternalLoanProvide::class, 'delete_intloan_provide']);
 

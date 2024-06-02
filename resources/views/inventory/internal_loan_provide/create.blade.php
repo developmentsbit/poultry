@@ -39,18 +39,19 @@
 							</div>
 						</div>
 
-						<div class="form-group col-md-6 mb-2">
+						{{--<div class="form-group col-md-6 mb-2">
 							<label>@lang('internal_loan_provide.due_loan'): </label>
 							<div class="input-group">
 
 								<input class="form-control" type="text" name="due_loan" id="due_loan"  placeholder="@lang('internal_loan_provide.due_loan')" readonly >
 							</div>
-						</div>
+						</div>--}}
+						
 						<div class="form-group col-md-6 mb-2">
 							<label>@lang('internal_loan_provide.amount'): <span class="text-danger" style="font-size: 15px;">*</span></label>
 							<div class="input-group">
 
-								<input class="form-control" type="text" name="amount" id="amount"  required="" placeholder="@lang('internal_loan_provide.amount')" onkeyup="return checkAmount()">
+								<input class="form-control" type="text" name="amount" id="amount"  required="" placeholder="@lang('internal_loan_provide.amount')">
 							</div>
 						</div>
 
@@ -76,51 +77,6 @@
 		</div> <!-- end card -->
 	</div><!-- end col-->
 </div>
-
-
-
-<script>
-    function getdue_loan()
-    {
-        let register_id = $('#register_id').val();
-
-        $.ajax({
-            headers : {
-                'X-CSRF-TOKEN' : '{{ csrf_token() }}'
-            },
-
-            url : '{{url('getintloanRegisterdue_loan')}}',
-
-            type : 'POST',
-
-            data : {register_id},
-
-            success : function(data)
-            {
-                $('#due_loan').val(data);
-            }
-        })
-    }
-
-
-</script>
-
-<script>
-    function checkAmount()
-    {
-
-        let due_loan = $('#due_loan').val();
-
-        let amount = $('#amount').val();
-
-
-        if(parseInt(amount) > parseInt(due_loan))
-        {
-            $('#amount').val(0);
-        }
-    }
-
-</script>
 
 
 
