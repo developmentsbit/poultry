@@ -61,12 +61,12 @@
                                     <input type="hidden" name="loan_recived" value="{{ $loan_recived }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Internal Loan Recived </span> <span class="text-right" style="">/-</span>
-                                    <input type="hidden" name="intloan_recived" value="">
+                                    <span>Internal Loan Recived </span> <span class="text-right" style="">{{ $internal_loan_recived }}/-</span>
+                                    <input type="hidden" name="intloan_recived" value="{{ $internal_loan_recived }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <b>Total Income </b> <b class="text-right" style="">/-</b>
-                                    <input type="hidden" name="total_income" value="">
+                                    <b>Total Income </b> <b class="text-right" style="">{{ $total_income }}/-</b>
+                                    <input type="hidden" name="total_income" value="{{ $total_income }}">
                                 </div>
                             </div>
                         </div>
@@ -80,40 +80,40 @@
                                     <input type="hidden" name="purchase" value="{{ $supplier_payment }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Sales Return </span> <span class="text-right" style="">/-</span>
-                                    <input type="hidden" name="sales_return" value="">
+                                    <span>Sales Return </span> <span class="text-right" style="">{{ $sales_return }}/-</span>
+                                    <input type="hidden" name="sales_return" value="{{ $sales_return }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Others Expense </span> <span class="text-right" style="">/-</span>
+                                    <span>Others Expense </span> <span class="text-right" style="">{{ $expense }}/-</span>
 
-                                    <input type="hidden" value="" name="others_expense">
+                                    <input type="hidden" value="{{ $expense }}" name="others_expense">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Bank Deposit </span> <span class="text-right" style=""> /-</span>
+                                    <span>Bank Deposit </span> <span class="text-right" style=""> {{ $bank_deposit }}/-</span>
 
-                                    <input type="hidden" value="" name="bank_deposit">
+                                    <input type="hidden" value="{{ $bank_deposit }}" name="bank_deposit">
                                 </div>
 
                                 <div class="list-item-sl">
-                                    <span>Bank Account Cost </span> <span class="text-right" style="">/-</span>
+                                    <span>Bank Account Cost </span> <span class="text-right" style="">{{ $bank_acc_cost }}/-</span>
 
-                                    <input type="hidden" name="bank_cost" value="">
+                                    <input type="hidden" name="bank_cost" value="{{ $bank_acc_cost }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Loan Provide </span> <span class="text-right" style="">/-</span>
-                                    <input type="hidden" value="" name="loan_provide">
+                                    <span>Loan Provide </span> <span class="text-right" style="">{{ $loan_provide }}/-</span>
+                                    <input type="hidden" value="{{ $loan_provide }}" name="loan_provide">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Internal Loan Provide </span> <span class="text-right" style="">/-</span>
-                                    <input type="hidden" value="" name="intloan_provide">
+                                    <span>Internal Loan Provide </span> <span class="text-right" style="">{{ $internal_loan_provide }}/-</span>
+                                    <input type="hidden" value="{{ $internal_loan_provide }}" name="intloan_provide">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Salary Payment </span> <span class="text-right" style="">/-</span>
-                                    <input type="hidden" value="" name="salary_payment">
+                                    <span>Salary Payment </span> <span class="text-right" style="">{{ $salary }}/-</span>
+                                    <input type="hidden" value="{{ $salary }}" name="salary_payment">
                                 </div>
                                 <div class="list-item-sl">
-                                    <b>Total Expense </b> <b class="text-right" style="">/-</b>
-                                    <input type="hidden" name="total_exense" value="">
+                                    <b>Total Expense </b> <b class="text-right" style="">{{$total_expense}}/-</b>
+                                    <input type="hidden" name="total_exense" value="{{$total_expense}}">
                                 </div>
                             </div>
                         </div>
@@ -130,11 +130,11 @@
                                     <th>Current Cash</th>
                                 </tr>
                                 <tr>
-                                    <td> /-</td>
-                                    <td> /-</td>
+                                    <td> {{ $total_income }}/-</td>
+                                    <td> {{ $total_expense }}/-</td>
 
                                     <td>
-                                        /-
+                                        {{ $cash }} /-
                                     </td>
                                 </tr>
 
@@ -143,14 +143,15 @@
                                 <div class="col-6 p-3" id="detailsbox">
                                     <b>Bank Balance</b><br>
 
+                                    <span>{{ $bankbalance }}/-</span>
 
-                                    <input type="hidden" name="bankbalance" value="">
+                                    <input type="hidden" name="bankbalance" value="{{$bankbalance}}">
                                 </div>
                                 <div class="col-6 p-3" id="detailsbox">
                                     <b>Cash In Hand</b><br>
+                                    {{ $cash_in_hand }}
 
-
-                                    <input type="hidden" name="cash" value="">
+                                    <input type="hidden" name="cash" value="{{$cash_in_hand}}">
                                 </div>
                             </div>
                         </div>
@@ -169,7 +170,7 @@
                                 </tr>
                                 <tr>
                                     <td>{{date('Y-m-d')}}</td>
-                                    <td>/-</td>
+                                    <td>{{ $cash_in_hand }}/-</td>
 
                                     <td>
                                         <input type="text" class="" name="comment">
@@ -181,10 +182,11 @@
 
                         <div class="col-12">
 
-
+                            @if($today_cash)
                             <span class="text-danger">N:B - Your Toady Cash is Closed</span>
-
+                            @else
                             <input type="submit" class="btn btn-success" value="Submit Cash Close">
+                            @endif
                         </div>
 
 					</div>

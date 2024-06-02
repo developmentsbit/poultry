@@ -8,6 +8,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use DataTables;
 use Auth;
 use App\Models\internal_loan_recived;
+use App\Models\internal_loan_provide;
 use App\Models\internal_loan_register;
 
 class InternalLoanRecived extends Controller
@@ -127,9 +128,9 @@ class InternalLoanRecived extends Controller
     {
         $recived = internal_loan_recived::where('register_id',$request->register_id)->sum('amount');
 
-        $paid = internal_loan_provide::where('register_id',$request->register_id)->sum('amount');
+        $provide = internal_loan_provide::where('register_id',$request->register_id)->sum('amount');
 
-        $result = $recived - $paid;
+        $result = $provide - $recived;
 
         return $result;
     }

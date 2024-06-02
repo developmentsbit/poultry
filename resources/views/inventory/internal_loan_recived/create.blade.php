@@ -28,7 +28,7 @@
                         <div class="form-group col-md-6 mb-2">
 							<label>@lang('internal_loan_recived.select_register'):</label>
 							<div class="input-group">
-								<select class="form-control" name="register_id" id="register_id" required>
+								<select class="form-control" name="register_id" id="register_id" required onchange="getdue_loan()">
                                     <option>Select One</option>
                                     @if($register)
                                     @foreach ($register as $v)

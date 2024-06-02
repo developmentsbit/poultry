@@ -20,6 +20,7 @@ use App\Models\cash_expense;
 use App\Models\employee_salary_payment;
 use Brian2694\Toastr\Facades\Toastr;
 use Auth;
+use DateTime;
 
 class CashCloseController extends Controller
 {
@@ -28,12 +29,26 @@ class CashCloseController extends Controller
      */
     public function index()
     {
+        // return date('Y-m-d');
+        $check = cash_close::where('cash_date',date('Y-m-d'))->count();
+        if($check > 0)
+        {
+            $today_cash = true;
+        }
+        else
+        {
+            $today_cash = false;
+        }
+
         $previous_cash = cash_close::orderBy('cash_date','DESC')->first();
         $today_date = date('Y-m-d');
         // return $previous_cash;
         if(isset($previous_cash))
         {
-            $last_cash_date = $previous_cash->cash_date;
+            $cash_date = $previous_cash->cash_date;
+            $last_cash_date = date('Y-m-d', strtotime($cash_date. ' + 1 days'));
+
+            // return $last_cash_date;
             $previous_cash = $previous_cash->cash;
         }
         else
@@ -55,6 +70,10 @@ class CashCloseController extends Controller
 
         $loan_recived = loan_recived::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
 
+        $internal_loan_recived = internal_loan_recived::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+
+        $total_income = $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived;
+
 
         /// expense
 
@@ -62,7 +81,27 @@ class CashCloseController extends Controller
 
         $expense = expense_entry::whereBetween('entry_date',[$last_cash_date,$today_date])->sum('amount');
 
-        return view('inventory.cash.index',compact('previous_cash','customer_payment','purchase_return','bank_withdraw','bank_interest','income','loan_recived','expense','supplier_payment'));
+        $sales_return = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->sum('return_amount');
+
+        $bank_deposit = bank_transaction::whereBetween('date',[$last_cash_date,$today_date])->where('transaction_type',1)->sum('amount');
+
+        $bank_acc_cost = bank_transaction::whereBetween('date',[$last_cash_date,$today_date])->where('transaction_type',3)->sum('amount');
+
+        $loan_provide = loan_provide::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+
+        $internal_loan_provide = internal_loan_provide::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+
+        $salary = employee_salary_payment::whereBetween('date',[$last_cash_date,$today_date])->sum('salary_withdraw');
+
+        $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary;
+
+
+        $bankbalance = ($bank_withdraw + $bank_interest) - ($bank_deposit + $bank_acc_cost);
+
+        $cash = $total_income - $total_expense;
+        $cash_in_hand = $cash - $bankbalance;
+
+        return view('inventory.cash.index',compact('previous_cash','customer_payment','purchase_return','bank_withdraw','bank_interest','income','loan_recived','expense','supplier_payment','internal_loan_recived','total_income','sales_return','bank_deposit','bank_acc_cost','loan_provide','internal_loan_provide','salary','total_expense','bankbalance','cash','cash_in_hand','today_cash'));
     }
 
     /**
