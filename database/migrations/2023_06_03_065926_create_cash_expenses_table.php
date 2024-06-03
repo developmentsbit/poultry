@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('loan_provide',10,2)->nullable();
             $table->double('intloan_provide',10,2)->nullable();
             $table->double('salary_payment',10,2)->nullable();
+            $table->double('customer_loan',10,2)->nullable();
             $table->integer('admin_id')->nullable();
             $table->timestamps();
         });

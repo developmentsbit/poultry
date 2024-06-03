@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('purchase_return',10,2)->nullable();
             $table->double('loan_recived',10,2)->nullable();
             $table->double('intloan_recived',10,2)->nullable();
+            $table->double('supplier_loan',10,2)->nullable();
             $table->integer('admin_id')->nullable();
             $table->timestamps();
         });

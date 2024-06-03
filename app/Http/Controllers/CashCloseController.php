@@ -57,7 +57,8 @@ class CashCloseController extends Controller
             $previous_cash = 0;
         }
 
-        $customer_payment = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->sum('payment_amount');
+        $customer_payment = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])
+        ->where('payment_amount','>',0)->sum('payment_amount');
 
         $purchase_return = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->sum('return_amount');
 
@@ -72,12 +73,18 @@ class CashCloseController extends Controller
 
         $internal_loan_recived = internal_loan_recived::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
 
-        $total_income = $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived;
+        $supplier_loan = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('payment','<',0)->sum('payment');
+
+        $supplier_loans = $supplier_loan * -1;
+
+        $total_income = $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived + $supplier_loans;
 
 
         /// expense
 
         $supplier_payment = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('payment','>',0)->sum('payment');
+
+        $customer_loan = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->where('payment_amount','<',0)->sum('payment_amount');
 
         $expense = expense_entry::whereBetween('entry_date',[$last_cash_date,$today_date])->sum('amount');
 
@@ -92,8 +99,9 @@ class CashCloseController extends Controller
         $internal_loan_provide = internal_loan_provide::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
 
         $salary = employee_salary_payment::whereBetween('date',[$last_cash_date,$today_date])->sum('salary_withdraw');
+        $customer_loans = $customer_loan * -1;
 
-        $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary;
+        $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary + $customer_loans;
 
 
         $bankbalance = ($bank_withdraw + $bank_interest) - ($bank_deposit + $bank_acc_cost);
@@ -101,7 +109,8 @@ class CashCloseController extends Controller
         $cash = $total_income - $total_expense;
         $cash_in_hand = $cash - $bankbalance;
 
-        return view('inventory.cash.index',compact('previous_cash','customer_payment','purchase_return','bank_withdraw','bank_interest','income','loan_recived','expense','supplier_payment','internal_loan_recived','total_income','sales_return','bank_deposit','bank_acc_cost','loan_provide','internal_loan_provide','salary','total_expense','bankbalance','cash','cash_in_hand','today_cash'));
+
+        return view('inventory.cash.index',compact('previous_cash','customer_payment','purchase_return','bank_withdraw','bank_interest','income','loan_recived','expense','supplier_payment','internal_loan_recived','total_income','sales_return','bank_deposit','bank_acc_cost','loan_provide','internal_loan_provide','salary','total_expense','bankbalance','cash','cash_in_hand','today_cash','last_cash_date','today_date','customer_loans','supplier_loans'));
     }
 
     /**
@@ -148,6 +157,7 @@ class CashCloseController extends Controller
             'bank_cost'=>$request->bank_cost,
             'loan_provide'=>$request->loan_provide,
             'intloan_provide'=>$request->intloan_provide,
+            'customer_loan' => $request->customer_loan,
         ]);
 
 
@@ -185,5 +195,25 @@ class CashCloseController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function customer_payment_details($from_date, $today_date)
+    {
+        $data = sales_payment::leftjoin('customer_infos','customer_infos.customer_id','sales_payments.customer_id')
+        ->whereBetween('sales_payments.entry_date',[$from_date,$today_date])
+        ->where('sales_payments.payment_amount','>',0)
+        ->select('sales_payments.*','customer_infos.customer_name_en')
+        ->get();
+
+        $total = sales_payment::whereBetween('sales_payments.entry_date',[$from_date,$today_date])
+        ->where('sales_payments.payment_amount','>',0)
+        ->sum('payment_amount');
+        return view('inventory.cash.customer_payment_details',compact('from_date','today_date','data','total'));
+    }
+
+    public function purchase_return_details($from_date,$today_date)
+    {
+        $data = supplier_payment::where('return_amount','>',0)->whereBetween('payment_date',[$from_date,$today_date])->get();
+        return view('inventory.cash.purchase_return_details',compact('from_date','today_date','data'));
     }
 }
