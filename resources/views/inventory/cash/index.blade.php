@@ -34,14 +34,20 @@
                             </div>
                             <div id="detailsbox">
                                 <div class="list-item-sl">
-                                    <span>Previous Cash </span> <span class="text-right" style="">{{ $previous_cash }}/-</span>
+                                    <span>Previous Cash </span> <span class="text-right" style="">
+                                        {{ $previous_cash }}/-
+                                    </span>
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Customer Payment </span> <span class="text-right" style="">{{ $customer_payment }}/-</span>
+                                    <span>Customer Payment </span> <span class="text-right" style="">
+                                        <a target="_blank" href="{{ url('customer_payment_details') }}/{{ $last_cash_date }}/{{ $today_date }}">{{ $customer_payment }}/-</a>
+                                    </span>
                                     <input type="hidden" name="sales" value="{{ $customer_payment }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Purchase Return </span> <span class="text-right" style="">{{ $purchase_return }}/-</span>
+                                    <span>Purchase Return </span> <span class="text-right" style="">
+                                        <a target="_blank" href="{{ url('purchase_return_details') }}/{{ $last_cash_date }}/{{ $today_date }}">{{ $purchase_return }}/-</a>
+                                    </span>
                                     <input type="hidden" name="purchase_return" value="{{ $purchase_return }}">
                                 </div>
                                 <div class="list-item-sl">
@@ -63,6 +69,10 @@
                                 <div class="list-item-sl">
                                     <span>Internal Loan Recived </span> <span class="text-right" style="">{{ $internal_loan_recived }}/-</span>
                                     <input type="hidden" name="intloan_recived" value="{{ $internal_loan_recived }}">
+                                </div>
+                                <div class="list-item-sl">
+                                    <span>Supplier Loan </span> <span class="text-right" style="">{{ $supplier_loans }}/-</span>
+                                    <input type="hidden" name="supplier_loan" value="{{ $supplier_loans }}">
                                 </div>
                                 <div class="list-item-sl">
                                     <b>Total Income </b> <b class="text-right" style="">{{ $total_income }}/-</b>
@@ -110,6 +120,10 @@
                                 <div class="list-item-sl">
                                     <span>Salary Payment </span> <span class="text-right" style="">{{ $salary }}/-</span>
                                     <input type="hidden" value="{{ $salary }}" name="salary_payment">
+                                </div>
+                                <div class="list-item-sl">
+                                    <span>Customer Loan </span> <span class="text-right" style="">{{ $customer_loans }}/-</span>
+                                    <input type="hidden" value="{{ $customer_loans }}" name="customer_loan">
                                 </div>
                                 <div class="list-item-sl">
                                     <b>Total Expense </b> <b class="text-right" style="">{{$total_expense}}/-</b>
