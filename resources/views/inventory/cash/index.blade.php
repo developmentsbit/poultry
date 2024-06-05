@@ -58,26 +58,42 @@
                                 </div>
                                 <div class="list-item-sl">
                                     <span>Bank Interset </span> <span class="text-right" style="">
-                                        <a href="{{ url('bank_interest_details') }}/{{  $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                        <a href="{{ url('bank_interest_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
                                             {{ $bank_interest }}/-
                                         </a>
                                     </span>
                                     <input type="hidden" name="bank_interest" value="{{ $bank_interest }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Others Income </span> <span class="text-right" style="">{{ $income }}/-</span>
+                                    <span>Others Income </span> <span class="text-right" style="">
+                                        <a href="{{ url('others_income_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $income }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="others" value="{{ $income }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Loan Recived </span> <span class="text-right" style="">{{ $loan_recived }}/-</span>
+                                    <span>Loan Recived </span> <span class="text-right" style="">
+                                        <a href="{{ url('loan_recived_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $loan_recived }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="loan_recived" value="{{ $loan_recived }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Internal Loan Recived </span> <span class="text-right" style="">{{ $internal_loan_recived }}/-</span>
+                                    <span>Internal Loan Recived </span> <span class="text-right" style="">
+                                        <a href="{{ url('internal_loan_recived_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank" rel="noopener noreferrer">
+                                            {{ $internal_loan_recived }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="intloan_recived" value="{{ $internal_loan_recived }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Supplier Loan </span> <span class="text-right" style="">{{ $supplier_loans }}/-</span>
+                                    <span>Supplier Loan </span> <span class="text-right" style="">
+                                        <a href="{{ url('supplier_loans_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank" rel="noopener noreferrer">
+                                            {{ $supplier_loans }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="supplier_loan" value="{{ $supplier_loans }}">
                                 </div>
                                 <div class="list-item-sl">

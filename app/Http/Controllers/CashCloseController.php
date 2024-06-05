@@ -242,4 +242,52 @@ class CashCloseController extends Controller
 
         return view('inventory.cash.bank_interest_details',compact('data','from_date','today_date','total'));
     }
+
+    public function others_income_details($from_date, $today_date)
+    {
+        $data = income_entry::leftjoin('income_expense_titles','income_expense_titles.id','income_entries.income_id')
+        ->whereBetween('income_entries.date',[$from_date,$today_date])
+        ->get();
+
+        $total = income_entry::whereBetween('income_entries.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.others_income_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function loan_recived_details($from_date, $today_date)
+    {
+        $data = loan_recived::leftjoin('loan_registers','loan_registers.id','loan_reciveds.register_id')
+        ->whereBetween('loan_reciveds.date',[$from_date,$today_date])
+        ->get();
+
+        $total = loan_recived::whereBetween('loan_reciveds.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.loan_recived_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function internal_loan_recived_details($from_date, $today_date)
+    {
+        $data = internal_loan_recived::leftjoin('internal_loan_registers','internal_loan_registers.id','internal_loan_reciveds.register_id')
+        ->whereBetween('internal_loan_reciveds.date',[$from_date,$today_date])
+        ->get();
+
+        $total = internal_loan_recived::whereBetween('internal_loan_reciveds.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.internal_loan_recived_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function supplier_loans_details($from_date, $today_date)
+    {
+        $data = supplier_payment::leftjoin('supplier_infos','supplier_infos.supplier_id','supplier_payments.id')
+        ->whereBetween('supplier_payments.payment_date',[$from_date,$today_date])
+        ->get();
+
+        $total = supplier_payment::whereBetween('supplier_payments.payment_date',[$from_date,$today_date])
+        ->sum('payment');
+
+        return view('inventory.cash.supplier_loans_details',compact('data','from_date','today_date','total'));
+    }
 }

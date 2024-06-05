@@ -493,6 +493,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('purchase_return_details/{from_date}/{today_date}',[CashCloseController::class,'purchase_return_details']);
     Route::get('bank_withdraw_details/{from_date}/{today_date}',[CashCloseController::class,'bank_withdraw_details']);
     Route::get('bank_interest_details/{from_date}/{today_date}',[CashCloseController::class,'bank_interest_details']);
+    Route::get('others_income_details/{from_date}/{today_date}',[CashCloseController::class,'others_income_details']);
+    Route::get('loan_recived_details/{from_date}/{today_date}',[CashCloseController::class,'loan_recived_details']);
+    Route::get('internal_loan_recived_details/{from_date}/{today_date}',[CashCloseController::class,'internal_loan_recived_details']);
+    Route::get('supplier_loans_details/{from_date}/{today_date}',[CashCloseController::class,'supplier_loans_details']);
 
     Route::get('/show_bank_report', [BankTransController::class, 'show_bank_report']);
 
