@@ -77,7 +77,7 @@ class CashCloseController extends Controller
 
         $supplier_loans = $supplier_loan * -1;
 
-        $total_income = $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived + $supplier_loans;
+        $total_income = $previous_cash + $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived + $supplier_loans;
 
 
         /// expense
@@ -104,7 +104,7 @@ class CashCloseController extends Controller
         $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary + $customer_loans;
 
 
-        $bankbalance = ($bank_withdraw + $bank_interest) - ($bank_deposit + $bank_acc_cost);
+        $bankbalance =  ($bank_deposit + $bank_acc_cost) - ($bank_withdraw + $bank_interest) ;
 
         $cash = $total_income - $total_expense;
         $cash_in_hand = $cash - $bankbalance;
@@ -215,5 +215,31 @@ class CashCloseController extends Controller
     {
         $data = supplier_payment::where('return_amount','>',0)->whereBetween('payment_date',[$from_date,$today_date])->get();
         return view('inventory.cash.purchase_return_details',compact('from_date','today_date','data'));
+    }
+
+    public function bank_withdraw_details($from_date,$today_date)
+    {
+        $data = bank_transaction::leftjoin('bank_infos','bank_infos.id','bank_transactions.account_id')
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->where('transaction_type',2)
+        ->get();
+        $total = bank_transaction::whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->where('transaction_type',2)
+        ->sum('amount');
+        return view('inventory.cash.bank_withdraw_details',compact('from_date','today_date','data','total'));
+    }
+
+    public function bank_interest_details($from_date,$today_date)
+    {
+        $data = bank_transaction::leftjoin('bank_infos','bank_infos.id','bank_transactions.account_id')
+        ->where('bank_transactions.transaction_type',4)
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->get();
+
+        $total = bank_transaction::where('bank_transactions.transaction_type',4)
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.bank_interest_details',compact('data','from_date','today_date','total'));
     }
 }
