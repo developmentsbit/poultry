@@ -51,11 +51,17 @@
                                     <input type="hidden" name="purchase_return" value="{{ $purchase_return }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Bank Withdraw </span> <span class="text-right" style="">{{ $bank_withdraw }}/-</span>
+                                    <span>Bank Withdraw </span> <span class="text-right" style="">
+                                        <a target="_blank" href="{{ url('bank_withdraw_details') }}/{{ $last_cash_date }}/{{ $today_date }}">{{ $bank_withdraw }}/-</a>
+                                    </span>
                                     <input type="hidden" name="bank_withdraw" value="{{ $bank_withdraw }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Bank Interset </span> <span class="text-right" style="">{{ $bank_interest }}/-</span>
+                                    <span>Bank Interset </span> <span class="text-right" style="">
+                                        <a href="{{ url('bank_interest_details') }}/{{  $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $bank_interest }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="bank_interest" value="{{ $bank_interest }}">
                                 </div>
                                 <div class="list-item-sl">
