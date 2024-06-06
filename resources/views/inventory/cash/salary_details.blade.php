@@ -22,7 +22,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Invoice No</th>
-                    <th>Customer Name</th>
+                    <th>Employee Name</th>
                     <th>Note</th>
                     <th>Payment Amount</th>
                 </tr>
@@ -31,22 +31,16 @@
                 @if(isset($data))
                 @foreach ($data as $v)
                 <tr>
-                    <td>{{ App\Traits\Date::DbToDate('-',$v->payment_date) }}</td>
+                    <td>{{ App\Traits\Date::DbToDate('-',$v->date) }}</td>
+                    <td>{{ $v->month }}</td>
                     <td>
-                        @if(isset($v->invoice_no))
-                        {{ $v->invoice_no }}
-                        @else
-                        -
-                        @endif
+                        {{ $v->name }}
                     </td>
                     <td>
-                        {{ $v->supplier_name_en }}
+                        {{$v->note}}
                     </td>
                     <td>
-                        {{$v->comment}}
-                    </td>
-                    <td>
-                        {{ $v->payment }}
+                        {{ $v->salary_withdraw }}
                     </td>
                 </tr>
                 @endforeach

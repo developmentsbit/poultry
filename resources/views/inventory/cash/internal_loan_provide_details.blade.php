@@ -21,38 +21,30 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Invoice No</th>
                     <th>Customer Name</th>
                     <th>Note</th>
-                    <th>Payment Amount</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 @if(isset($data))
                 @foreach ($data as $v)
                 <tr>
-                    <td>{{ App\Traits\Date::DbToDate('-',$v->payment_date) }}</td>
+                    <td>{{ App\Traits\Date::DbToDate('-',$v->date) }}</td>
                     <td>
-                        @if(isset($v->invoice_no))
-                        {{ $v->invoice_no }}
-                        @else
-                        -
-                        @endif
+                        {{ $v->name }}
                     </td>
                     <td>
-                        {{ $v->supplier_name_en }}
+                        {{$v->note}}
                     </td>
                     <td>
-                        {{$v->comment}}
-                    </td>
-                    <td>
-                        {{ $v->payment }}
+                        {{ $v->amount }}
                     </td>
                 </tr>
                 @endforeach
                 @endif
                 <tr>
-                    <th style="text-align: right" colspan="4"> Total</th>
+                    <th style="text-align: right" colspan="3"> Total</th>
                     <th>{{$total}}</th>
                 </tr>
             </tbody>
