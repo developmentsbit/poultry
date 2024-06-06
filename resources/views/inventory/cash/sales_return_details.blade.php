@@ -24,14 +24,14 @@
                     <th>Invoice No</th>
                     <th>Customer Name</th>
                     <th>Note</th>
-                    <th>Payment Amount</th>
+                    <th>Return Amount</th>
                 </tr>
             </thead>
             <tbody>
                 @if(isset($data))
                 @foreach ($data as $v)
                 <tr>
-                    <td>{{ App\Traits\Date::DbToDate('-',$v->payment_date) }}</td>
+                    <td>{{ App\Traits\Date::DbToDate('-',$v->entry_date) }}</td>
                     <td>
                         @if(isset($v->invoice_no))
                         {{ $v->invoice_no }}
@@ -40,13 +40,13 @@
                         @endif
                     </td>
                     <td>
-                        {{ $v->supplier_name_en }}
+                        {{ $v->customer_name_en }}
                     </td>
                     <td>
-                        {{$v->comment}}
+                        {{$v->note}}
                     </td>
                     <td>
-                        {{ $v->payment }}
+                        {{ $v->return_amount }}
                     </td>
                 </tr>
                 @endforeach

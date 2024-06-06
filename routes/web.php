@@ -497,6 +497,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('loan_recived_details/{from_date}/{today_date}',[CashCloseController::class,'loan_recived_details']);
     Route::get('internal_loan_recived_details/{from_date}/{today_date}',[CashCloseController::class,'internal_loan_recived_details']);
     Route::get('supplier_loans_details/{from_date}/{today_date}',[CashCloseController::class,'supplier_loans_details']);
+    Route::get('supplier_payment_details/{from_date}/{today_date}',[CashCloseController::class,'supplier_payment_details']);
+    Route::get('sales_return_details/{from_date}/{today_date}',[CashCloseController::class,'sales_return_details']);
+    Route::get('others_expense_details/{from_date}/{today_date}',[CashCloseController::class,'others_expense_details']);
+    Route::get('bank_deposit_details/{from_date}/{today_date}',[CashCloseController::class,'bank_deposit_details']);
+    Route::get('bank_acc_cost_details/{from_date}/{today_date}',[CashCloseController::class,'bank_acc_cost_details']);
+    Route::get('loan_provide_details/{from_date}/{today_date}',[CashCloseController::class,'loan_provide_details']);
+    Route::get('internal_loan_provide_details/{from_date}/{today_date}',[CashCloseController::class,'internal_loan_provide_details']);
+    Route::get('salary_details/{from_date}/{today_date}',[CashCloseController::class,'salary_details']);
+    Route::get('customer_loans_details/{from_date}/{today_date}',[CashCloseController::class,'customer_loans_details']);
 
     Route::get('/show_bank_report', [BankTransController::class, 'show_bank_report']);
 

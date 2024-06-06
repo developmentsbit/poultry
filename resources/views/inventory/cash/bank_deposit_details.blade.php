@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Customer Payment Report</title>
+  <title>Bank Withdraw Details</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     @endcomponent
 
     <center>
-        <b>Customer Payment Detials</b>
+        <b>Bank Interest Detials</b>
         <br>
         From {{ App\Traits\Date::DbToDate('-',$from_date) }} To {{ App\Traits\Date::DbToDate('-',$today_date) }}
         <br>
@@ -21,39 +21,31 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Invoice No</th>
-                    <th>Customer Name</th>
-                    <th>Note</th>
-                    <th>Payment Amount</th>
+                    <th>Bank Name</th>
+                    <th>TRX ID</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 @if(isset($data))
                 @foreach ($data as $v)
                 <tr>
-                    <td>{{ App\Traits\Date::DbToDate('-',$v->payment_date) }}</td>
+                    <td>{{ App\Traits\Date::DbToDate('-',$v->date) }}</td>
                     <td>
-                        @if(isset($v->invoice_no))
-                        {{ $v->invoice_no }}
-                        @else
-                        -
-                        @endif
+                        {{ $v->bank_name.'-'. $v->account_type }}
                     </td>
                     <td>
-                        {{ $v->supplier_name_en }}
+                        {{ $v->voucher_cheque_no }}
                     </td>
                     <td>
-                        {{$v->comment}}
-                    </td>
-                    <td>
-                        {{ $v->payment }}
+                        {{ $v->amount }}
                     </td>
                 </tr>
                 @endforeach
                 @endif
                 <tr>
-                    <th style="text-align: right" colspan="4"> Total</th>
-                    <th>{{$total}}</th>
+                    <th colspan="3" style="text-align: right">Total</th>
+                    <th>{{ $total }}</th>
                 </tr>
             </tbody>
         </table>

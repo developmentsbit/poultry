@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="list-item-sl">
                                     <span>Internal Loan Recived </span> <span class="text-right" style="">
-                                        <a href="{{ url('internal_loan_recived_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank" rel="noopener noreferrer">
+                                        <a href="{{ url('internal_loan_recived_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
                                             {{ $internal_loan_recived }}/-
                                         </a>
                                     </span>
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="list-item-sl">
                                     <span>Supplier Loan </span> <span class="text-right" style="">
-                                        <a href="{{ url('supplier_loans_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank" rel="noopener noreferrer">
+                                        <a href="{{ url('supplier_loans_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
                                             {{ $supplier_loans }}/-
                                         </a>
                                     </span>
@@ -108,43 +108,77 @@
                             </div>
                             <div id="detailsbox">
                                 <div class="list-item-sl">
-                                    <span>Supplier Payment </span> <span class="text-right" style="">{{ $supplier_payment }}/-</span>
+                                    <span>Supplier Payment </span> <span class="text-right" style="">
+                                        <a href="{{ url('supplier_payment_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $supplier_payment }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="purchase" value="{{ $supplier_payment }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Sales Return </span> <span class="text-right" style="">{{ $sales_return }}/-</span>
+                                    <span>Sales Return </span> <span class="text-right" style="">
+                                        <a href="{{ url('sales_return_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $sales_return }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" name="sales_return" value="{{ $sales_return }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Others Expense </span> <span class="text-right" style="">{{ $expense }}/-</span>
+                                    <span>Others Expense </span> <span class="text-right" style="">
+                                        <a href="{{ url('others_expense_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $expense }}/-
+                                        </a>
+                                    </span>
 
                                     <input type="hidden" value="{{ $expense }}" name="others_expense">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Bank Deposit </span> <span class="text-right" style=""> {{ $bank_deposit }}/-</span>
-
+                                    <span>Bank Deposit </span> <span class="text-right" style="">
+                                    <a href="{{ url('bank_deposit_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                        {{ $bank_deposit }}/-</span>
+                                    </a>
                                     <input type="hidden" value="{{ $bank_deposit }}" name="bank_deposit">
                                 </div>
 
                                 <div class="list-item-sl">
-                                    <span>Bank Account Cost </span> <span class="text-right" style="">{{ $bank_acc_cost }}/-</span>
+                                    <span>Bank Account Cost </span> <span class="text-right" style="">
+                                        <a href="{{ url('bank_acc_cost_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $bank_acc_cost }}/-
+                                        </a>
+                                    </span>
 
                                     <input type="hidden" name="bank_cost" value="{{ $bank_acc_cost }}">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Loan Provide </span> <span class="text-right" style="">{{ $loan_provide }}/-</span>
+                                    <span>Loan Provide </span> <span class="text-right" style="">
+                                        <a href="{{ url('loan_provide_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $loan_provide }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" value="{{ $loan_provide }}" name="loan_provide">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Internal Loan Provide </span> <span class="text-right" style="">{{ $internal_loan_provide }}/-</span>
+                                    <span>Internal Loan Provide </span> <span class="text-right" style="">
+                                        <a href="{{ url('internal_loan_provide_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $internal_loan_provide }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" value="{{ $internal_loan_provide }}" name="intloan_provide">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Salary Payment </span> <span class="text-right" style="">{{ $salary }}/-</span>
+                                    <span>Salary Payment </span> <span class="text-right" style="">
+                                        <a href="{{ url('salary_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $salary }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" value="{{ $salary }}" name="salary_payment">
                                 </div>
                                 <div class="list-item-sl">
-                                    <span>Customer Loan </span> <span class="text-right" style="">{{ $customer_loans }}/-</span>
+                                    <span>Customer Loan </span> <span class="text-right" style="">
+                                        <a href="{{ url('customer_loans_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $customer_loans }}/-
+                                        </a>
+                                    </span>
                                     <input type="hidden" value="{{ $customer_loans }}" name="customer_loan">
                                 </div>
                                 <div class="list-item-sl">

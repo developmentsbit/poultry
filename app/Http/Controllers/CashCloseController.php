@@ -281,13 +281,130 @@ class CashCloseController extends Controller
 
     public function supplier_loans_details($from_date, $today_date)
     {
-        $data = supplier_payment::leftjoin('supplier_infos','supplier_infos.supplier_id','supplier_payments.id')
+        $data = supplier_payment::leftjoin('supplier_infos','supplier_infos.supplier_id','supplier_payments.supplier_id')
+        ->where('payment','<',0)
         ->whereBetween('supplier_payments.payment_date',[$from_date,$today_date])
         ->get();
 
         $total = supplier_payment::whereBetween('supplier_payments.payment_date',[$from_date,$today_date])
-        ->sum('payment');
+        ->where('payment','<',0)->sum('payment');
 
         return view('inventory.cash.supplier_loans_details',compact('data','from_date','today_date','total'));
     }
+
+    public function supplier_payment_details($from_date, $today_date)
+    {
+        $data = supplier_payment::leftjoin('supplier_infos','supplier_infos.supplier_id','supplier_payments.supplier_id')
+        ->where('payment','>',0)
+        ->whereBetween('supplier_payments.payment_date',[$from_date,$today_date])
+        ->get();
+
+        $total = supplier_payment::whereBetween('supplier_payments.payment_date',[$from_date,$today_date])
+        ->where('payment','>',0)->sum('payment');
+
+        return view('inventory.cash.supplier_payment_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function sales_return_details($from_date, $today_date)
+    {
+        $data = sales_payment::leftjoin('customer_infos','customer_infos.customer_id','sales_payments.customer_id')
+        ->where('return_amount','>',0)
+        ->whereBetween('sales_payments.entry_date',[$from_date,$today_date])
+        ->get();
+
+        $total = sales_payment::whereBetween('sales_payments.entry_date',[$from_date,$today_date])
+        ->where('return_amount','>',0)->sum('return_amount');
+
+        return view('inventory.cash.sales_return_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function others_expense_details($from_date, $today_date)
+    {
+        $data = expense_entry::leftjoin('income_expense_titles','income_expense_titles.id','expense_entries.expense_id')
+        ->whereBetween('expense_entries.date',[$from_date,$today_date])
+        ->get();
+
+        $total = expense_entry::whereBetween('expense_entries.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.others_expense_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function bank_deposit_details($from_date,$today_date)
+    {
+        $data = bank_transaction::leftjoin('bank_infos','bank_infos.id','bank_transactions.account_id')
+        ->where('bank_transactions.transaction_type',1)
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->get();
+
+        $total = bank_transaction::where('bank_transactions.transaction_type',1)
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.bank_deposit_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function bank_acc_cost_details($from_date,$today_date)
+    {
+        $data = bank_transaction::leftjoin('bank_infos','bank_infos.id','bank_transactions.account_id')
+        ->where('bank_transactions.transaction_type',3)
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->get();
+
+        $total = bank_transaction::where('bank_transactions.transaction_type',3)
+        ->whereBetween('bank_transactions.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.bank_acc_cost_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function loan_provide_details($from_date, $today_date)
+    {
+        $data = loan_provide::leftjoin('loan_registers','loan_registers.id','loan_provides.register_id')
+        ->whereBetween('loan_provides.date',[$from_date,$today_date])
+        ->get();
+
+        $total = loan_provide::whereBetween('loan_provides.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.loan_provide_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function internal_loan_provide_details($from_date, $today_date)
+    {
+        $data = internal_loan_provide::leftjoin('loan_registers','loan_registers.id','internal_loan_provides.register_id')
+        ->whereBetween('internal_loan_provides.date',[$from_date,$today_date])
+        ->get();
+
+        $total = internal_loan_provide::whereBetween('internal_loan_provides.date',[$from_date,$today_date])
+        ->sum('amount');
+
+        return view('inventory.cash.internal_loan_provide_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function salary_details($from_date, $today_date)
+    {
+        $data = employee_salary_payment::leftjoin('employee_infos','employee_infos.id','employee_salary_payments.employee_id')
+        ->whereBetween('employee_salary_payments.date',[$from_date,$today_date])
+        ->get();
+
+        $total = employee_salary_payment::whereBetween('employee_salary_payments.date',[$from_date,$today_date])
+        ->sum('salary_withdraw');
+
+        return view('inventory.cash.salary_details',compact('data','from_date','today_date','total'));
+    }
+
+    public function customer_loans_details($from_date, $today_date)
+    {
+        $data = sales_payment::leftjoin('customer_infos','customer_infos.customer_id','sales_payments.customer_id')
+        ->where('payment_amount','<',0)
+        ->whereBetween('sales_payments.entry_date',[$from_date,$today_date])
+        ->get();
+
+        $total = sales_payment::whereBetween('sales_payments.entry_date',[$from_date,$today_date])
+        ->where('payment_amount','<',0)->sum('payment_amount');
+
+        return view('inventory.cash.customer_loans_details',compact('data','from_date','today_date','total'));
+    }
+
 }
