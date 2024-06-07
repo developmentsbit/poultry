@@ -385,10 +385,12 @@ class CashCloseController extends Controller
     public function salary_details($from_date, $today_date)
     {
         $data = employee_salary_payment::leftjoin('employee_infos','employee_infos.id','employee_salary_payments.employee_id')
+        ->where('salary_withdraw','>',0)
         ->whereBetween('employee_salary_payments.date',[$from_date,$today_date])
         ->get();
 
         $total = employee_salary_payment::whereBetween('employee_salary_payments.date',[$from_date,$today_date])
+        ->where('salary_withdraw','>',0)
         ->sum('salary_withdraw');
 
         return view('inventory.cash.salary_details',compact('data','from_date','today_date','total'));

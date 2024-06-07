@@ -13,7 +13,7 @@
     @endcomponent
 
     <center>
-        <b>Customer Payment Detials</b>
+        <b>Customer Loan Detials</b>
         <br>
         From {{ App\Traits\Date::DbToDate('-',$from_date) }} To {{ App\Traits\Date::DbToDate('-',$today_date) }}
         <br>
@@ -46,14 +46,14 @@
                         {{$v->note}}
                     </td>
                     <td>
-                        {{ $v->payment_amount }}
+                        {{ $v->payment_amount * -1 }}
                     </td>
                 </tr>
                 @endforeach
                 @endif
                 <tr>
                     <th style="text-align: right" colspan="4"> Total</th>
-                    <th>{{$total}}</th>
+                    <th>{{$total * -1}}</th>
                 </tr>
             </tbody>
         </table>
