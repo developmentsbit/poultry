@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Customer Payment Report</title>
+  <title>Supplier Loan Report</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     @endcomponent
 
     <center>
-        <b>Customer Payment Detials</b>
+        <b>Supplier Loan Detials</b>
         <br>
         From {{ App\Traits\Date::DbToDate('-',$from_date) }} To {{ App\Traits\Date::DbToDate('-',$today_date) }}
         <br>
@@ -46,14 +46,14 @@
                         {{$v->comment}}
                     </td>
                     <td>
-                        {{ $v->payment }}
+                        {{ $v->payment * -1 }}
                     </td>
                 </tr>
                 @endforeach
                 @endif
                 <tr>
                     <th style="text-align: right" colspan="4"> Total</th>
-                    <th>{{$total}}</th>
+                    <th>{{$total * -1}}</th>
                 </tr>
             </tbody>
         </table>

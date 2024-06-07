@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Customer Payment Report</title>
+  <title>Internal Loan Recived Report</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     @endcomponent
 
     <center>
-        <b>Customer Payment Detials</b>
+        <b>Internal Loan Recived Detials</b>
         <br>
         From {{ App\Traits\Date::DbToDate('-',$from_date) }} To {{ App\Traits\Date::DbToDate('-',$today_date) }}
         <br>
