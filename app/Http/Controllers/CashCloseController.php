@@ -57,8 +57,16 @@ class CashCloseController extends Controller
             $previous_cash = 0;
         }
 
-        $customer_payment = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])
-        ->where('payment_amount','>',0)->sum('payment_amount');
+        $customer_payments = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])
+        ->where('payment_amount','>',0)
+        ->sum('payment_amount');
+        $purchase_with_sales = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])
+        ->where('note','=','purchasewithsales')
+        ->sum('payment_amount');
+
+        // return $purchase_with_sales;
+
+        $customer_payment = $customer_payments - $purchase_with_sales;
 
         $purchase_return = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->sum('return_amount');
 
