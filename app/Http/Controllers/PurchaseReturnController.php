@@ -80,7 +80,8 @@ class PurchaseReturnController extends Controller
         ->select('product_informations.pdt_name_en','product_informations.pdt_id')
         ->groupBy('product_informations.pdt_id')
         ->get();
-        return view('inventory.purchase_return.create',compact('product'));
+        $supplier = supplier_info::get();
+        return view('inventory.purchase_return.create',compact('product','supplier'));
     }
 
     /**
@@ -167,6 +168,7 @@ class PurchaseReturnController extends Controller
                 ->join('product_measurements','product_measurements.measurement_id','product_informations.pdt_measurement')
                 ->where('purchase_entries.product_id',$request->pdt_id)
                 ->where('purchase_entries.product_quantity','!=',NULL)
+                ->where('purchase_ledgers.suplier_id',$request->supplier_id)
                 ->select('supplier_infos.supplier_name_en','supplier_infos.supplier_id','purchase_entries.*','purchase_ledgers.invoice_date','product_measurements.measurement_unit')
                 ->get();
 

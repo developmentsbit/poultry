@@ -30,6 +30,7 @@
             <tbody>
                 @if(isset($data))
                 @foreach ($data as $v)
+                @if($v->note != 'purchasewithsales')
                 <tr>
                     <td>{{ App\Traits\Date::DbToDate('-',$v->entry_date) }}</td>
                     <td>
@@ -49,6 +50,7 @@
                         {{ $v->payment_amount }}
                     </td>
                 </tr>
+                @endif
                 @endforeach
                 @endif
                 <tr>
