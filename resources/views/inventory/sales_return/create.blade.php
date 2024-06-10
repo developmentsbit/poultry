@@ -35,7 +35,7 @@
 				<form method="post" class="" id="purchaseForm">
                      @csrf
                     <div class="row">
-                        <div class="form-group mb-2 col-md-12">
+                        <div class="form-group mb-2 col-md-6">
                             <label>Product Name:</label>
                             <div class="input-group">
                                 <select class="form-control js-example-basic-single" name="pdt_id" id=
@@ -49,6 +49,20 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group mb-2 col-md-6">
+                        <label>Customer Name: <span class="text-danger" style="font-size: 15px;">*</span></label>
+                        <div class="input-group">
+
+                            <select class="form-control js-example-basic-single" name="customer_id" id=
+                            "customer_id" required="" onchange="getSalesDetails()">
+                            <option value="">Select Customer</option>
+                            @foreach($customer as $i)
+                            <option value="{{ $i->customer_id  }}">{{ $i->customer_id }} - {{ $i->customer_name_en }} - {{$i->customer_phone}}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                </div>
                 </div>
 
                 <div class="row showdata mt-3 p-3">
@@ -102,6 +116,7 @@
         function getSalesDetails()
         {
             let pdt_id = $('#pdt_id').val();
+            let customer_id = $('#customer_id').val();
 
             // console.log(pdt_id);
             if(pdt_id != "")
@@ -114,7 +129,7 @@
 
                     type : 'POST',
 
-                    data : {pdt_id},
+                    data : {pdt_id,customer_id},
 
                     success : function(data)
                     {

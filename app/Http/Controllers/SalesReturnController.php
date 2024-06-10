@@ -81,7 +81,9 @@ class SalesReturnController extends Controller
         ->groupBy('product_informations.pdt_id')
         ->get();
 
-        return view('inventory.sales_return.create',compact('product'));
+        $customer = customer_info::all();
+
+        return view('inventory.sales_return.create',compact('product','customer'));
     }
 
     /**
@@ -167,6 +169,7 @@ class SalesReturnController extends Controller
                 ->join('product_measurements','product_measurements.measurement_id','product_informations.pdt_measurement')
                 ->where('sales_entries.product_id',$request->pdt_id)
                 ->where('sales_entries.product_quantity','!=',NULL)
+                ->where('sales_ledgers.customer_id',$request->customer_id)
                 ->select('customer_infos.customer_name_en','customer_infos.customer_id','sales_entries.*','sales_ledgers.invoice_date','product_measurements.measurement_unit')
                 ->get();
         return view('inventory.sales_return.show_sales_details',compact('data'));
