@@ -21,6 +21,8 @@ class CustomerPaymentController extends Controller
     {
         if ($request->ajax()) {
             $data = sales_payment::leftjoin('customer_infos','customer_infos.customer_id','sales_payments.customer_id')
+            ->where('sales_payments.branch_id',Auth::user()->branch)
+            ->where('sales_payments.return_amount','=',NULL)
             ->select('sales_payments.*','customer_infos.customer_name_en','customer_infos.customer_phone')
             ->get();
             return Datatables::of($data)->addIndexColumn()

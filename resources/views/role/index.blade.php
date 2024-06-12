@@ -40,16 +40,16 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4 class="header-title">Roles</h4>
+                        <h4 class="header-title">@lang('role.index_title')</h4>
                         <ul class="nav nav-tabs nav-bordered mb-3">
                             <li class="nav-item">
                                 <a href="#roles-tab-all" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
-                                    All
+                                    @lang('common.all')
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#roles-tab-deleted" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-                                    Deleted
+                                    @lang('common.deleted_list')
                                 </a>
                             </li>
                         </ul> <!-- end nav-->
@@ -59,11 +59,37 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('common.status')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        @if($data)
+                                        @foreach ($data as $v)
+                                        <tr>
+                                            <td>{{$i++}}</td>
+                                            <td>{{$v->name}}</td>
+                                            <td>
+                                                @if($v->status == 1)
+                                                <span class="badge bg-success">@lang('common.active')</span>
+                                                @else
+                                                <span class="badge bg-danger">@lang('common.inactive')</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a style="float: left" href="{{route('role.edit',$v->id)}}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                                                <form method="post" action="{{route('role.destroy',$v->id)}}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                <button onclick="return confirm('Are You Sure ?')" type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                                <a style="float: left" href="{{url('role/'.$v->id.'/permission')}}" class="btn btn-sm btn-info"><i class="fa fa-lock"></i></a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                    </tbody>
                                 </table>
                             </div> <!-- end all-->
 
@@ -72,9 +98,9 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('common.status')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -108,99 +134,7 @@
     <script src="{{ asset('assets/js/pages/demo.datatable-init.js') }}"></script>
     <!-- end demo js-->
 
-    <script>
-        $(function() {
 
-            let datatable_columns = [{
-                    data: 'DT_RowIndex',
-                    name: "DT_RowIndex",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'name',
-                    name: 'name',
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
-            ]
-
-            let datatable_columns_defs = [{
-                    'bSortable': true,
-                    'aTargets': [0, 1, 2, 3]
-                },
-                {
-                    'bSearchable': false,
-                    'aTargets': [0]
-                },
-                {
-                    className: 'text-center',
-                    targets: [0, 2, 3]
-                },
-            ]
-
-            $('#datatable-roles-all').DataTable({
-                processing: true,
-                serverSide: true,
-                pageLength: 25,
-                serverMethod: 'get',
-                lengthMenu: [10, 25, 50, 100],
-                order: [0, "asc"],
-                language: {
-                    'loadingRecords': '&nbsp;',
-                    'processing': 'Loading ...'
-                },
-                ajax: {
-                    url: '{{ route('role.index') }}',
-                    type: 'get',
-                    dataType: 'JSON',
-                    cache: false,
-                },
-                columns: datatable_columns,
-                search: {
-                    "regex": true
-                },
-                columnDefs: datatable_columns_defs,
-            });
-
-            $('#datatable-roles-deleted').DataTable({
-                processing: true,
-                serverSide: true,
-                pageLength: 25,
-                serverMethod: 'get',
-                lengthMenu: [10, 25, 50, 100],
-                order: [0, "asc"],
-                language: {
-                    'loadingRecords': '&nbsp;',
-                    'processing': 'Loading ...'
-                },
-                ajax: {
-                    url: '{{ route('role.deleted_list') }}',
-                    type: 'get',
-                    dataType: 'JSON',
-                    cache: false,
-                },
-                columns: datatable_columns,
-                search: {
-                    "regex": true
-                },
-                columnDefs: datatable_columns_defs,
-            });
-
-        })
-
-        function statusChange(id) {
-            statusUpdate(id, '{{ route('role.status') }}')
-        }
-    </script>
 
     @include('components.delete_script')
 @endpush

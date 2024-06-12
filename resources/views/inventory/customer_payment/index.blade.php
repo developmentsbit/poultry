@@ -60,6 +60,7 @@
                                         <th>@lang('customer_payment.date')</th>
                                         <th>@lang('customer_payment.customer_name')</th>
                                         <th>@lang('customer_payment.payment')</th>
+                                        <th>Discount</th>
                                         <th>@lang('common.action')</th>
                                     </tr>
                                 </thead>
@@ -82,6 +83,7 @@
                                         <th>@lang('customer_payment.date')</th>
                                         <th>@lang('customer_payment.customer_name')</th>
                                         <th>@lang('customer_payment.payment')</th>
+                                        <th>Discount</th>
                                         <th>@lang('common.action')</th>
                                     </tr>
                                 </thead>
@@ -148,6 +150,7 @@
                   {data: 'entry_date', name: 'entry_date'},
                   {data: 'customer_details', name: 'customer_details'},
                   {data: 'payment_amount', name: 'payment_amount'},
+                  {data: 'discount', name: 'discount'},
                   {data: 'action', name: 'action', orderable: false, searchable: false},
               ]
           });

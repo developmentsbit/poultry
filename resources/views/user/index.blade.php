@@ -12,7 +12,7 @@
 @section('content')
     <div class="container">
 
-        @component('components.breadcrumb')
+        @component('components.breadcrumb')s
             @slot('title')
                 @lang('user.user')
             @endslot
@@ -40,16 +40,16 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4 class="header-title">Users</h4>
+                        <h4 class="header-title">@lang('common.users')</h4>
                         <ul class="nav nav-tabs nav-bordered mb-3">
                             <li class="nav-item">
                                 <a href="#users-tab-all" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
-                                    All
+                                    @lang('common.all')
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#users-tab-deleted" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-                                    Deleted
+                                    @lang('common.deleted_list')
                                 </a>
                             </li>
                         </ul> <!-- end nav-->
@@ -59,30 +59,104 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Avatar</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Mobile</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>@lang('common.avatar')</th>
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('common.email')</th>
+                                            <th>@lang('common.mobile')</th>
+                                            <th>@lang('common.status')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        @if($data)
+                                        @foreach ($data as $v)
+                                        <tr>
+                                            <td>{{$i++}}</td>
+                                            <td>
+                                                <img src="{{asset('profile_images')}}/{{$v->picture}}" alt="" style="height: 35px;width:35px;border-radius:100%;">
+                                            </td>
+                                            <td>
+                                                {{$v->name}}
+                                            </td>
+                                            <td>
+                                                {{$v->email}}
+                                            </td>
+                                            <td>
+                                                {{$v->mobile}}
+                                            </td>
+                                            <td>
+                                                @if($v->status == 1)
+                                                <span class="badge bg-success">@lang('common.active')</span>
+                                                @else
+                                                <span class="badge bg-danger">@lang('common.inactive')</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-sm btn-info" href="{{route('user.edit',$v->id)}}"><i class="fa fa-edit"></i></a>
+                                                @if($v->email != "super@admin.com")
+                                                <form method="post" action="{{route('user.destroy',$v->id)}}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                                </form>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                    </tbody>
                                 </table>
                             </div> <!-- end all-->
-
+                            @php
+                            use App\Models\User;
+                            $deleted = User::onlyTrashed()->get();
+                            $i = 1;
+                            @endphp
                             <div class="tab-pane" id="users-tab-deleted">
                                 <table id="datatable-users-deleted" class="table table-striped dt-responsive nowrap w-100">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Avatar</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Mobile</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>@lang('common.avatar')</th>
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('common.email')</th>
+                                            <th>@lang('common.mobile')</th>
+                                            <th>@lang('common.status')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        @if($deleted)
+                                        @foreach ($deleted as $v)
+                                        <tr>
+                                            <td>{{$i++}}</td>
+                                            <td>
+                                                <img src="{{asset('profile_images')}}/{{$v->picture}}" alt="" style="height: 35px;width:35px;border-radius:100%;">
+                                            </td>
+                                            <td>
+                                                {{$v->name}}
+                                            </td>
+                                            <td>
+                                                {{$v->email}}
+                                            </td>
+                                            <td>
+                                                {{$v->mobile}}
+                                            </td>
+                                            <td>
+                                                @if($v->status == 1)
+                                                <span class="badge bg-success">@lang('common.active')</span>
+                                                @else
+                                                <span class="badge bg-danger">@lang('common.inactive')</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{route('user.restore',$v->id)}}" class="btn btn-sm btn-warning">@lang('common.restore')</a>
+                                                <a href="{{route('user.force_destroy',$v->id)}}" class="btn btn-danger btn-sm">@lang('common.permenantly_delete')</a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                    </tbody>
                                 </table>
                             </div> <!-- end deleted-->
                         </div> <!-- end tab-content-->
@@ -115,112 +189,12 @@
     <!-- end demo js-->
 
     <script>
-        window.onload = function(e) {
-            $(".destroy[data-id='{{ Auth::user()->id }}']").hide()
-        }
         $(function() {
-
-            let datatable_columns = [{
-                    data: 'DT_RowIndex',
-                    name: "DT_RowIndex",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'picture',
-                    name: 'picture',
-                },
-                {
-                    data: 'name',
-                    name: 'name',
-                },
-                {
-                    data: 'email',
-                    name: 'email',
-                },
-                {
-                    data: 'mobile',
-                    name: 'mobile',
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
-            ]
-
-            let datatable_columns_defs = [{
-                    'bSortable': true,
-                    'aTargets': [0, 1, 2, 3]
-                },
-                {
-                    'bSearchable': false,
-                    'aTargets': [0]
-                },
-                {
-                    className: 'text-center',
-                    targets: [0, 3, 4]
-                },
-            ]
-
-            $('#datatable-users-all').DataTable({
-                processing: true,
-                serverSide: true,
-                pageLength: 25,
-                serverMethod: 'get',
-                lengthMenu: [10, 25, 50, 100],
-                order: [0, "asc"],
-                language: {
-                    'loadingRecords': '&nbsp;',
-                    'processing': 'Loading ...'
-                },
-                ajax: {
-                    url: '{{ route('user.index') }}',
-                    type: 'get',
-                    dataType: 'JSON',
-                    cache: false,
-                },
-                columns: datatable_columns,
-                search: {
-                    "regex": true
-                },
-                columnDefs: datatable_columns_defs,
-            });
-
-            $('#datatable-users-deleted').DataTable({
-                processing: true,
-                serverSide: true,
-                pageLength: 25,
-                serverMethod: 'get',
-                lengthMenu: [10, 25, 50, 100],
-                order: [0, "asc"],
-                language: {
-                    'loadingRecords': '&nbsp;',
-                    'processing': 'Loading ...'
-                },
-                ajax: {
-                    url: '{{ route('user.deleted_list') }}',
-                    type: 'get',
-                    dataType: 'JSON',
-                    cache: false,
-                },
-                columns: datatable_columns,
-                search: {
-                    "regex": true
-                },
-                columnDefs: datatable_columns_defs,
-            });
-
-        })
-
-        function statusChange(id) {
-            statusUpdate(id, '{{ route('user.status') }}')
-        }
+            $('#datatable-users-all').DataTable();
+        });
+        $(function() {
+            $('#datatable-users-deleted').DataTable();
+        });
     </script>
 
     @include('components.delete_script')

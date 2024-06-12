@@ -33,17 +33,10 @@ class RoleController extends Controller
     public function index()
     {
 
-        if (request()->ajax()) {
-            $parameter_array = [];
-            $role = \Spatie\Permission\Models\Role::query()->where('name', auth()->user()->getRoleNames()->first())->first();
-            if ($role->id != $this->super_role) {
-                $parameter_array = [
-                    'where' => [['id', '!=', $this->super_role]],
-                ];
-            }
-            return $this->role->datatable($parameter_array);
-        }
-        return view($this->path('index'));
+        $data = \Spatie\Permission\Models\Role::where('deleted_at',NULL)->get();
+        // dd($data);
+        $i = 1;
+        return view('role.index',compact('data','i'));
 
     }
 

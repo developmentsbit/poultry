@@ -25,6 +25,7 @@ class SalesReturnController extends Controller
             $data = sales_payment::leftjoin('customer_infos','customer_infos.customer_id','sales_payments.customer_id')
             ->where('sales_payments.payment_amount','=',NULL)
             ->where('sales_payments.note','!=','PD')
+            ->where('sales_payments.branch_id',Auth::user()->branch)
             ->select('sales_payments.*','customer_infos.customer_name_en','customer_infos.customer_address')
             ->get();
             return Datatables::of($data)->addIndexColumn()
@@ -77,6 +78,7 @@ class SalesReturnController extends Controller
     public function create()
     {
         $product = sales_entry::leftjoin('product_informations','product_informations.pdt_id','sales_entries.product_id')
+        ->where('sales_entries.branch_id',Auth::user()->branch)
         ->select('product_informations.pdt_name_en','product_informations.pdt_id')
         ->groupBy('product_informations.pdt_id')
         ->get();
@@ -170,6 +172,7 @@ class SalesReturnController extends Controller
                 ->where('sales_entries.product_id',$request->pdt_id)
                 ->where('sales_entries.product_quantity','!=',NULL)
                 ->where('sales_ledgers.customer_id',$request->customer_id)
+                ->where('sales_ledgers.branch_id',Auth::user()->branch)
                 ->select('customer_infos.customer_name_en','customer_infos.customer_id','sales_entries.*','sales_ledgers.invoice_date','product_measurements.measurement_unit')
                 ->get();
         return view('inventory.sales_return.show_sales_details',compact('data'));
@@ -201,6 +204,7 @@ class SalesReturnController extends Controller
                 'note'=>'sales_return',
                 'admin_id'=>Auth::user()->id,
                 'customer_id'=>$request->customer_id,
+                'branch_id' => Auth::user()->branch,
             ]);
 
             sales_entry::create([
@@ -211,11 +215,14 @@ class SalesReturnController extends Controller
                 'entry_date'=>date('Y-m-d'),
                 'admin_id'=>Auth::user()->id,
                 'status' =>$insert->id,
+                'branch_id' => Auth::user()->branch,
             ]);
 
-            $previous_sales_return = stock::where('product_id',$request->product_id)->sum('sales_return_qty');
+            $previous_sales_return = stock::where('product_id',$request->product_id)->where('branch_id',Auth::user()->branch)->sum('sales_return_qty');
 
-            stock::where('product_id',$request->product_id)->update([
+            stock::where('product_id',$request->product_id)
+            ->where('branch_id',Auth::user()->branch)
+            ->update([
                 'sales_return_qty'=>$previous_sales_return + $request->return_quantity,
             ]);
             Toastr::success('Customer Product Return Successfully', 'Success');

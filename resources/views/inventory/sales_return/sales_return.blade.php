@@ -31,7 +31,7 @@
 		<div class="card-body p-2">
 
 
-			<h3>Sales Return  <a href="{{ route('sales_return.index') }}" class="btn btn-success float-end rounded addbutton"><i class="fa fa-eye"></i>&nbsp;All Purchase Return</a></h3>
+			<h3>Sales Return  <a href="{{ route('sales_return.index') }}" class="btn btn-success float-end rounded addbutton"><i class="fa fa-eye"></i>&nbsp;All Sales Return</a></h3>
             <hr>
 				<form method="post" class="" id="" action="{{url('submitSalesReturnForm')}}/{{$data['sales_ledger']->invoice_no}}">
                 @csrf

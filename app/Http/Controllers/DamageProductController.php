@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\product_information;
 use App\Models\stock;
 use Brian2694\Toastr\Facades\Toastr;
+use Auth;
 
 class DamageProductController extends Controller
 {
@@ -21,6 +22,7 @@ class DamageProductController extends Controller
     {
         $data = stock::where('damage_product','>',0)
         ->join('product_informations','product_informations.pdt_id','stocks.product_id')
+        ->where('stocks.branch_id',Auth::user()->branch)
         ->select('product_informations.pdt_name_en','product_informations.pdt_name_bn','stocks.*')
         ->get();
         return view($this->path.'.index',compact('data'));
@@ -40,10 +42,10 @@ class DamageProductController extends Controller
      */
     public function store(Request $request)
     {
-        $prev = stock::where('product_id',$request->product_id)->first();
+        $prev = stock::where('product_id',$request->product_id)->where('branch_id',Auth::user()->branch)->first();
         if($prev)
         {
-            stock::where('product_id',$request->product_id)->update([
+            stock::where('product_id',$request->product_id)->where('branch_id',Auth::user()->branch)->update([
                 'damage_product' => $request->damage_product + $prev->damage_product,
             ]);
         }
@@ -86,7 +88,7 @@ class DamageProductController extends Controller
 
     public function getOriginalQty(Request $request)
     {
-        $stock = stock::where('product_id',$request->product_id)->first();
+        $stock = stock::where('product_id',$request->product_id)->where('branch_id',Auth::user()->branch)->first();
         if($stock)
         {
 
