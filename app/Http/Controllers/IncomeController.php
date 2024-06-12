@@ -19,6 +19,7 @@ class IncomeController extends Controller
     {
         if ($request->ajax()) {
             $data = income_entry::leftjoin('income_expense_titles','income_expense_titles.id','income_entries.income_id')
+            ->where('income_entries.branch',Auth::user()->branch)
             ->select('income_entries.*','income_expense_titles.title_en','income_expense_titles.title_bn')
             ->get();
             return Datatables::of($data)->addIndexColumn()
