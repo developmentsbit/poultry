@@ -41,16 +41,22 @@ class SupplierController extends Controller
 
                 $return_amount = supplier_payment::where('supplier_id',$row->supplier_id)->sum('return_amount');
 
-                $purchase_payment = supplier_payment::where('supplier_id',$row->supplier_id)->sum('payment');
+                $purchase_payment = supplier_payment::where('supplier_id',$row->supplier_id)->where('payment' , '>', 0)->sum('payment');
 
                 $return_paid = supplier_payment::where('supplier_id',$row->supplier_id)->sum('returnpaid');
+
+                $discount = supplier_payment::where('supplier_id',$row->supplier_id)->sum('discount');
+
+                $supplier_loans = supplier_payment::where('supplier_id',$row->supplier_id)->where('payment','<',0)->sum('payment');
+
+                $loans = $supplier_loans * -1;
 
 
                 $grandtotal = $total_purchase - $total_discount;
 
-                $total = ($grandtotal - $purchase_payment) + $pd;
+                $total = (($grandtotal - $purchase_payment) + $pd ) - $discount;
 
-                $subtotal = ($total - $return_amount) - $return_paid;
+                $subtotal = ($total - $return_amount) - $return_paid + $loans ;
 
 
                 return '<span class="badge bg-danger">'.$subtotal.'</span>';

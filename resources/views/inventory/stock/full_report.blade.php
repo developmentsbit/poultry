@@ -17,7 +17,9 @@
                 <th>SL</th>
                 <th>Product Name</th>
                 <th>Purchase Quantity</th>
+                <th>Purchase Return Quantity</th>
                 <th>Sales Quantity</th>
+                <th>Sales Return Quantity</th>
                 <th>Available Quantity</th>
             </tr>
         </thead>
@@ -31,9 +33,29 @@
                 <td>{{$i++}}</td>
                 <td>{{$v->product_id}} - {{$v->pdt_name_en}}</td>
                 <td>{{$v->quantity}} {{$v->measurement_unit}}</td>
-                <td>{{$v->sales_qty}} {{$v->measurement_unit}}</td>
+                <td>
+                    @if($v->purchase_return_qty > 0)
+                    {{$v->purchase_return_qty}} {{$v->measurement_unit}}
+                    @else
+                    -
+                    @endif
+                </td>
+                <td>
+                    @if($v->sales_qty > 0)
+                    {{$v->sales_qty}} {{$v->measurement_unit}}
+                    @else
+                    -
+                    @endif
+                </td>
+                <td>
+                    @if($v->sales_return_qty > 0)
+                    {{$v->sales_return_qty}} {{$v->measurement_unit}}
+                    @else
+                    -
+                    @endif
+                </td>
                 @php
-                $available_qty = $v->quantity - $v->sales_qty;
+                $available_qty = ( $v->quantity - $v->purchase_return_qty) - ($v->sales_qty - $v->sales_return_qty)
                 @endphp
                 <td>{{$available_qty}} {{$v->measurement_unit}}</td>
             </tr>

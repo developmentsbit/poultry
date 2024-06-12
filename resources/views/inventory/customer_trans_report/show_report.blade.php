@@ -20,6 +20,7 @@
             </td>
         </tr>
         <tr>
+            <th>Branch</th>
             <th>Date</th>
             <th>Invoice Details</th>
             <th>Grand Total</th>
@@ -30,7 +31,7 @@
             <th>Due</th>
         </tr>
         <tr>
-            <td colspan="7">Balance The Date In {{$previous_date}}</td>
+            <td colspan="8">Balance The Date In {{$previous_date}}</td>
             <td>{{$balance}} /-</td>
         </tr>
 
@@ -47,6 +48,9 @@
         @if(isset($data))
         @foreach ($data as $v)
         <tr>
+            <td>
+                {{ App\Traits\Branch::getName($v->branch_id) }}
+            </td>
             <td>
                 {{GetDate::getDate($v->entry_date,'-') ?? '-'}}
             </td>
@@ -166,7 +170,7 @@
         @endforeach
         @endif
         <tr>
-            <td colspan="2">
+            <td colspan="3">
                 Total :
             </td>
             <th style="text-align:left;">

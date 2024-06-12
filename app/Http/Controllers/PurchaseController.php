@@ -28,6 +28,7 @@ class PurchaseController extends Controller
         if ($request->ajax()) {
             $data = purchase_ledger::leftjoin('supplier_infos','supplier_infos.supplier_id','purchase_ledgers.suplier_id')
             ->leftjoin('customer_infos','customer_infos.customer_id','purchase_ledgers.suplier_id')
+            ->where('purchase_ledgers.branch_id',Auth::user()->branch)
             ->select('purchase_ledgers.*','supplier_infos.supplier_name_en','supplier_infos.supplier_phone','customer_infos.customer_name_en','customer_infos.customer_phone')
             ->get();
             return Datatables::of($data)->addIndexColumn()

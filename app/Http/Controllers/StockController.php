@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\stock;
 use DataTables;
+use Auth;
 
 class StockController extends Controller
 {
@@ -15,6 +16,7 @@ class StockController extends Controller
     {
         if ($request->ajax()) {
             $data = stock::leftjoin('product_informations','product_informations.pdt_id','stocks.product_id')
+            ->where('stocks.branch_id',Auth::user()->branch)
             ->select('stocks.*','product_informations.pdt_name_en')
             ->get();
             return Datatables::of($data)->addIndexColumn()
@@ -83,6 +85,7 @@ class StockController extends Controller
     {
         $data = stock::leftjoin('product_informations','product_informations.pdt_id','stocks.product_id')
         ->leftjoin('product_measurements','product_measurements.measurement_id','product_informations.pdt_measurement')
+        ->where('stocks.branch_id',Auth::user()->branch)
         ->select('product_informations.pdt_name_en','stocks.*','product_measurements.measurement_unit')
         ->get();
         return view('inventory.stock.full_report',compact('data'));

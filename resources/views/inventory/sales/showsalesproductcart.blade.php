@@ -12,7 +12,7 @@ $totalsalesamount = $totalsalesamount + $purchasesubtotal;
 
 
 $subunit = DB::table('measurement_subunits')->where('measurement_unit_id',$d->pdt_measurement)->get();
-$stock = DB::table('stocks')->where('product_id',$d->pdt_id)->first();
+$stock = DB::table('stocks')->where('product_id',$d->pdt_id)->where('branch_id',Auth::user()->branch)->first();
 
 $avialable_qty = ($stock->quantity + $stock->purchase_return_qty) - ($stock->sales_qty - $stock->sales_return_qty);
 @endphp

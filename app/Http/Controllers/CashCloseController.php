@@ -30,7 +30,7 @@ class CashCloseController extends Controller
     public function index()
     {
         // return date('Y-m-d');
-        $check = cash_close::where('cash_date',date('Y-m-d'))->count();
+        $check = cash_close::where('branch_id',Auth::user()->branch)->where('cash_date',date('Y-m-d'))->count();
         if($check > 0)
         {
             $today_cash = true;
@@ -40,7 +40,7 @@ class CashCloseController extends Controller
             $today_cash = false;
         }
 
-        $previous_cash = cash_close::orderBy('cash_date','DESC')->first();
+        $previous_cash = cash_close::orderBy('cash_date','DESC')->where('branch_id',Auth::user()->branch)->first();
         $today_date = date('Y-m-d');
         // return $previous_cash;
         if(isset($previous_cash))
@@ -59,29 +59,31 @@ class CashCloseController extends Controller
 
         $customer_payments = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])
         ->where('payment_amount','>',0)
+        ->where('branch_id',Auth::user()->branch)
         ->sum('payment_amount');
         $purchase_with_sales = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])
         ->where('note','=','purchasewithsales')
+        ->where('branch_id',Auth::user()->branch)
         ->sum('payment_amount');
 
         // return $purchase_with_sales;
 
         $customer_payment = $customer_payments - $purchase_with_sales;
 
-        $purchase_return = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->sum('return_amount');
+        $purchase_return = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->sum('return_amount');
 
-        $bank_withdraw = bank_transaction::where('transaction_type',2)->whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $bank_withdraw = bank_transaction::where('transaction_type',2)->whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->sum('amount');
 
-        $bank_interest = bank_transaction::where('transaction_type',4)->whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $bank_interest = bank_transaction::where('transaction_type',4)->whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->sum('amount');
 
-        $income = income_entry::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $income = income_entry::whereBetween('date',[$last_cash_date,$today_date])->where('branch',Auth::user()->branch)->sum('amount');
 
 
-        $loan_recived = loan_recived::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $loan_recived = loan_recived::whereBetween('date',[$last_cash_date,$today_date])->where('branch',Auth::user()->branch)->sum('amount');
 
-        $internal_loan_recived = internal_loan_recived::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $internal_loan_recived = internal_loan_recived::whereBetween('date',[$last_cash_date,$today_date])->where('branch',Auth::user()->branch)->sum('amount');
 
-        $supplier_loan = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('payment','<',0)->sum('payment');
+        $supplier_loan = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('payment','<',0)->where('branch_id',Auth::user()->branch)->sum('payment');
 
         $supplier_loans = $supplier_loan * -1;
 
@@ -90,23 +92,23 @@ class CashCloseController extends Controller
 
         /// expense
 
-        $supplier_payment = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('payment','>',0)->sum('payment');
+        $supplier_payment = supplier_payment::whereBetween('payment_date',[$last_cash_date,$today_date])->where('payment','>',0)->where('branch_id',Auth::user()->branch)->sum('payment');
 
-        $customer_loan = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->where('payment_amount','<',0)->sum('payment_amount');
+        $customer_loan = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->where('payment_amount','<',0)->where('branch_id',Auth::user()->branch)->sum('payment_amount');
 
-        $expense = expense_entry::whereBetween('entry_date',[$last_cash_date,$today_date])->sum('amount');
+        $expense = expense_entry::whereBetween('entry_date',[$last_cash_date,$today_date])->where('branch',Auth::user()->branch)->sum('amount');
 
-        $sales_return = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->sum('return_amount');
+        $sales_return = sales_payment::whereBetween('entry_date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->sum('return_amount');
 
-        $bank_deposit = bank_transaction::whereBetween('date',[$last_cash_date,$today_date])->where('transaction_type',1)->sum('amount');
+        $bank_deposit = bank_transaction::whereBetween('date',[$last_cash_date,$today_date])->where('transaction_type',1)->where('branch_id',Auth::user()->branch)->sum('amount');
 
-        $bank_acc_cost = bank_transaction::whereBetween('date',[$last_cash_date,$today_date])->where('transaction_type',3)->sum('amount');
+        $bank_acc_cost = bank_transaction::whereBetween('date',[$last_cash_date,$today_date])->where('transaction_type',3)->where('branch_id',Auth::user()->branch)->sum('amount');
 
-        $loan_provide = loan_provide::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $loan_provide = loan_provide::whereBetween('date',[$last_cash_date,$today_date])->where('branch',Auth::user()->branch)->sum('amount');
 
-        $internal_loan_provide = internal_loan_provide::whereBetween('date',[$last_cash_date,$today_date])->sum('amount');
+        $internal_loan_provide = internal_loan_provide::whereBetween('date',[$last_cash_date,$today_date])->where('branch',Auth::user()->branch)->sum('amount');
 
-        $salary = employee_salary_payment::whereBetween('date',[$last_cash_date,$today_date])->sum('salary_withdraw');
+        $salary = employee_salary_payment::whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->sum('salary_withdraw');
         $customer_loans = $customer_loan * -1;
 
         $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary + $customer_loans;
@@ -142,6 +144,7 @@ class CashCloseController extends Controller
             'bankbalance'=>$request->bankbalance,
             'comment'=>$request->comment,
             'admin_id'=>Auth::user()->id,
+            'branch_id' =>Auth::user()->branch,
         ]);
 
         cash_income::insert([
@@ -154,6 +157,7 @@ class CashCloseController extends Controller
             'loan_recived'=>$request->loan_recived,
             'intloan_recived'=>$request->intloan_recived,
             'admin_id'=>Auth::user()->id,
+            'branch_id' => Auth::user()->branch,
         ]);
 
         cash_expense::insert([
@@ -166,6 +170,7 @@ class CashCloseController extends Controller
             'loan_provide'=>$request->loan_provide,
             'intloan_provide'=>$request->intloan_provide,
             'customer_loan' => $request->customer_loan,
+            'branch_id' => Auth::user()->branch,
         ]);
 
 

@@ -20,6 +20,7 @@ class SupplierPaymentController extends Controller
     {
         if ($request->ajax()) {
             $data = supplier_payment::leftjoin('supplier_infos','supplier_infos.supplier_id','supplier_payments.supplier_id')
+            ->where('supplier_payments.branch_id',Auth::user()->branch)
             ->select('supplier_payments.*','supplier_infos.supplier_name_en','supplier_infos.supplier_phone')
             ->get();
             return Datatables::of($data)->addIndexColumn()

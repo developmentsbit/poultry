@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('bankbalance')->nullable();
             $table->text('comment')->nullable();
             $table->integer('admin_id')->nullable();
+            $table->integer('branch_id')->nullable();
             $table->timestamps();
         });
     }

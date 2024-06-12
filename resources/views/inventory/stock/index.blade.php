@@ -44,11 +44,11 @@
                                 <thead>
                                     <tr>
                                         <th>@lang('stock.product')</th>
-                                        <th>@lang('stock.purchase_quantity')</th>
-                                        {{-- <th>Purchase Return Quantity</th> --}}
-                                        <th>@lang('stock.sales_quantity')</th>
-                                        {{-- <th>Sales Return Quantity</th> --}}
-                                        <th>@lang('stock.available')</th>
+                                        <th>Purchase Qty</th>
+                                        <th>Purchase Return</th>
+                                        <th>Sales Qty</th>
+                                        <th>Sales Return</th>
+                                        <th>Available Qty</th>
 
                                     </tr>
                                 </thead>
@@ -95,9 +95,9 @@
               columns: [
                   {data: 'product_name', name: 'product_name'},
                   {data: 'quantity', name: 'quantity'},
-                //   {data: 'purchase_return_qty', name: 'purchase_return_qty'},
+                  {data: 'purchase_return_qty', name: 'purchase_return_qty'},
                   {data: 'sales_qty', name: 'sales_qty'},
-                //   {data: 'sales_return_qty', name: 'sales_return_qty'},
+                  {data: 'sales_return_qty', name: 'sales_return_qty'},
                   {data: 'available_quantity', name: 'available_quantity'},
               ]
           });
