@@ -26,7 +26,7 @@
             </td>
         </tr>
         <tr>
-            <th>Sl</th>
+            <th>Branch</th>
             <th>Date</th>
             <th>Invoice No</th>
             <th>Grand Total</th>
@@ -56,7 +56,7 @@
         @foreach ($data as $v)
         @if($v->comment != 'PD')
         <tr>
-            <td>{{$sl++}}</td>
+            <td>{{App\Traits\Branch::getName($v->branch_id)}}</td>
             <td>{{GetDate::getDate($v->payment_date,'-') ?? '-'}}</td>
             <td>
                 <a target="_blank" href="{{ url('invoicepurchase') }}/{{ $v->invoice_no }}">

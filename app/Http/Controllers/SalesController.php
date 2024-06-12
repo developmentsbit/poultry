@@ -147,6 +147,7 @@ class SalesController extends Controller
     {
         $customer = customer_info::where('type',1)->get();
         $product = stock::leftjoin("product_informations",'product_informations.pdt_id','stocks.product_id')
+        ->where('stocks.branch_id',Auth::user()->branch)
         ->select("stocks.*",'product_informations.pdt_id','product_informations.pdt_name_en','product_informations.pdt_name_bn')
         ->get();
         return view('inventory.sales.create',compact('customer','product'));

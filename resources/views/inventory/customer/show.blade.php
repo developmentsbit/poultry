@@ -39,6 +39,7 @@
             </td>
         </tr>
         <tr>
+            <th>Branch</th>
             <th>Date</th>
             <th>Invoice No</th>
             <th>Invoice Details</th>
@@ -46,16 +47,18 @@
             <th>Paid</th>
             <th>Loan</th>
             <th>Return Amount</th>
+            <th>Discount</th>
             <th>Due</th>
         </tr>
         <tr>
-            <td style="text-align: right;" colspan="7">Previous Due</td>
+            <td style="text-align: right;" colspan="9">Previous Due</td>
             <td>{{$previous_due}}</td>
         </tr>
         @if($sales_payment)
         @foreach ($sales_payment as $v)
 
         <tr>
+            <td>{{ App\Traits\Branch::getName($v->branch_id) }}</td>
             <td>{{GetDate::getDate($v->entry_date,'-') ?? '-'}}</td>
             <td>
                 @if($v->note != 'purchasewithsales')
@@ -156,6 +159,13 @@
                 @endif
             </td>
             <td>
+                @if($v->discount != NULL)
+                {{ $v->discount }}
+                @else
+                -
+                @endif
+            </td>
+            <td>
                 @if($v->invoice_no && $v->note != 'purchasewithsales')
 
                     @if($v->return_amount != NULL)
@@ -185,7 +195,7 @@
         @endforeach
         @endif
         <tr>
-            <td colspan="7" style="text-align: right">Total Due</td>
+            <td colspan="9" style="text-align: right">Total Due</td>
             <td>
                 <b>{{$total_due}}/-</b>
             </td>

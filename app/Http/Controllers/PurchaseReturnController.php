@@ -79,6 +79,7 @@ class PurchaseReturnController extends Controller
         $product = purchase_entry::leftjoin('product_informations','product_informations.pdt_id','purchase_entries.product_id')
         ->select('product_informations.pdt_name_en','product_informations.pdt_id')
         ->groupBy('product_informations.pdt_id')
+        ->where('purchase_entries.branch_id',Auth::user()->branch)
         ->get();
         $supplier = supplier_info::get();
         return view('inventory.purchase_return.create',compact('product','supplier'));
@@ -169,6 +170,7 @@ class PurchaseReturnController extends Controller
                 ->where('purchase_entries.product_id',$request->pdt_id)
                 ->where('purchase_entries.product_quantity','!=',NULL)
                 ->where('purchase_ledgers.suplier_id',$request->supplier_id)
+                ->where('purchase_ledgers.branch_id',Auth::user()->branch   )
                 ->select('supplier_infos.supplier_name_en','supplier_infos.supplier_id','purchase_entries.*','purchase_ledgers.invoice_date','product_measurements.measurement_unit')
                 ->get();
 
@@ -184,6 +186,7 @@ class PurchaseReturnController extends Controller
         ->where('purchase_entries.invoice_no',$invoice_id)
         ->where('purchase_entries.product_id',$product_id)
         ->where('purchase_entries.product_quantity','!=',NULL)
+        ->where('purchase_entries.branch_id',Auth::user()->branch)
         ->select('purchase_entries.*','product_informations.pdt_name_en')
         ->first();
         $data['supplier'] = supplier_info::where('supplier_id',$data['purchase_ledger']->suplier_id)->first();
@@ -202,6 +205,7 @@ class PurchaseReturnController extends Controller
             'comment'=>'purchase_return',
             'admin_id'=>Auth::user()->id,
             'supplier_id'=>$request->supplier_id,
+            'branch_id' => Auth::user()->branch,
         ]);
         purchase_entry::create([
             'invoice_no'=>$invoice_id,
@@ -211,11 +215,12 @@ class PurchaseReturnController extends Controller
             'entry_date'=>date('Y-m-d'),
             'admin_id'=>Auth::user()->id,
             'status' =>$insert_sp->id,
+            'branch_id' => Auth::user()->branch
         ]);
 
-        $previous_purchase_return = stock::where('product_id',$request->product_id)->sum('purchase_return_qty');
+        $previous_purchase_return = stock::where('product_id',$request->product_id)->where('branch_id',Auth::user()->branch)->sum('purchase_return_qty');
 
-        stock::where('product_id',$request->product_id)->update([
+        stock::where('product_id',$request->product_id)->where('branch_id',Auth::user()->branch)->update([
             'purchase_return_qty'=>$previous_purchase_return + $request->return_quantity,
         ]);
 

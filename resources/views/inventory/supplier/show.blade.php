@@ -26,7 +26,7 @@
             </td>
         </tr>
        <tr>
-         <th style="width : 3%;">SL</th>
+         <th style="width : 3%;">Branch</th>
          <th style="width: 11%;">Date</th>
          <th style="wdith : 8%;">Invoice No</th>
          <th style="width: 30%;">Invoice Details</th>
@@ -51,7 +51,7 @@
         @foreach ($data['supplier_payment'] as $sp)
         @if($sp->comment != 'PD')
         <tr>
-            <td>{{$data['sl']++}}</td>
+            <td>{{App\Traits\Branch::getName($sp->branch_id)}}</td>
             <td>{{GetDate::getDate($sp->payment_date,'-') ?? '-'}}</td>
             <td>{{$sp->invoice_no ?? '-'}}</td>
             <td style="font-size: 11px;padding:0px;">
