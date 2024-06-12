@@ -24,4 +24,5 @@ return [
     // API
     "user_not_found" => "User Not Found",
     "user_details" => "User Details",
+    'image'=>'Image',
 ];

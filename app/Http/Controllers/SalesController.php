@@ -29,6 +29,7 @@ class SalesController extends Controller
         if ($request->ajax()) {
             $data = sales_ledger::leftjoin('customer_infos','customer_infos.customer_id','sales_ledgers.customer_id')
             ->select('sales_ledgers.*','customer_infos.customer_name_en','customer_infos.customer_phone')
+            ->where('sales_ledgers.branch_id',Auth::user()->branch)
             ->get();
             return Datatables::of($data)->addIndexColumn()
             ->addColumn('customer_info',function($row){

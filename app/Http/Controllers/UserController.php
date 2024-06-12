@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\branch_info;
+use Brian2694\Toastr\Facades\Toastr;
+use DB;
+use Log;
 
 class UserController extends Controller
 {
@@ -33,17 +36,22 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        if (request()->ajax()) {
-            $parameter_array = [];
-            /*if(auth()->user()->role_id != @$this->super_role){
-            $parameter_array = [
-            'where' =>[['role_id','!=',@$this->super_role]],
-            'relations' =>['role']
-            ];
-            }*/
-            return $this->user->datatable($parameter_array);
-        }
-        return view($this->path('index'));
+        // if (request()->ajax()) {
+        //     $parameter_array = [];
+        //     /*if(auth()->user()->role_id != @$this->super_role){
+        //     $parameter_array = [
+        //     'where' =>[['role_id','!=',@$this->super_role]],
+        //     'relations' =>['role']
+        //     ];
+        //     }*/
+        //     return $this->user->datatable($parameter_array);
+        // }
+        // return view($this->path('index'));
+        $data = User::all();
+
+        $i = 1;
+
+        return view('user.index',compact('data','i'));
     }
 
     public function deletedListIndex()
@@ -67,37 +75,50 @@ class UserController extends Controller
         } else {
             $roles = Role::query()->where('status', 1)->pluck('name', 'id');
         }
-        $branch = branch_info::where('status',1)->get();
         $data = array(
             'roles' => $roles,
-            'branch' => $branch,
+            'branch' => branch_info::all(),
         );
-
         return view($this->path('create'))->with($data);
     }
 
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
+        //dd($request->all());
         $data = $request->all();
-        if ($request->image_remote_url) {
-            // make name unique with date time
-            $unique_name = $request->image_real_name . '_' . date('d-m-Y-H-i-s') . '_' . microtime(true) . '.jpg';
 
-            // get image from remote/external url
-            $contents = file_get_contents($request->image_remote_url);
+        $data = array(
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'mobile'=>$request->mobile,
+            'dob'=>$request->dob,
+            'password'=>Hash::make($request->password),
+            'picture'=>'0',
+            'branch' => $request->branch,
+        );
 
-            // Save image
-            Storage::put('/public/profile_images/' . $unique_name, $contents);
+        //dd($data);
 
-            $request['picture'] = $unique_name;
+        $file = $request->file('image');
+
+        if($file)
+        {
+            $imageName = rand().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path().'/profile_images/',$imageName);
+
+            $data['picture'] = $imageName;
         }
-        if ($request->password != null) {
-            $request['password'] = Hash::make($request->password);
-        }
-        $this->user->create($request);
-        $user = session('created_user');
-        $this->user->send_email_with_credentials($user->id, $data);
-        return $this->user->sync_role($user->id, $request);
+        $user = User::create($data);
+
+        $role = Role::find($request->role_id);
+
+        // dd($role);
+
+        $user->assignRole($role);
+
+        Toastr::success('User Created', 'Success');
+        return redirect()->back();
     }
 
     public function show($id)
@@ -105,59 +126,97 @@ class UserController extends Controller
         //
     }
 
-    public function edit(User $user)
+    public function edit($id)
     {
-        if (auth()->user()->role_id != @$this->super_role) {
-            $roles = Role::query()->where('status', 1)->where('id', '!=', @$this->super_role)->pluck('name', 'id');
-        } else {
-            $roles = Role::query()->where('status', 1)->pluck('name', 'id');
-        }
+        // return $id;
+        $data = User::find($id);
+
+        $roles = Role::all();
+
+        return view('user.edit',compact('data','roles'));
+    }
+
+    public function update(Request $request,$id)
+    {
+        $data = $request->all();
 
         $data = array(
-            'roles' => $roles,
-            'user' => $user,
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'mobile'=>$request->mobile,
+            'dob'=>$request->dob,
+            // 'password'=>Hash::make($request->password),
+            'branch' => $request->branch,
         );
 
-        return view($this->path('edit'))->with($data);
-    }
+        //dd($data);
 
-    public function update(UserRequest $request, User $user)
-    {
-        if ($request->image_remote_url) {
-            // make name unique with date time
-            $unique_name = $request->image_real_name . '_' . date('d-m-Y-H-i-s') . '_' . microtime(true) . '.jpg';
+        $file = $request->file('image');
 
-            // get image from remote/external url
-            $contents = file_get_contents($request->image_remote_url);
 
-            // Save image
-            Storage::put('/public/profile_images/' . $unique_name, $contents);
+        if($file)
+        {
+            $pathImage = User::find($id);
 
-            $request['picture'] = $unique_name;
-        }
-        if ($request->password != null) {
-            $request['password'] = Hash::make($request->password);
-        } else {
-            $request['password'] = $user->password;
+            $path = public_path().'/profile_images/'.$pathImage->picture;
+
+            if(file_exists($path))
+            {
+                unlink($path);
+            }
         }
 
-        $this->user->sync_role($user->id, $request);
-        return $this->user->update($user->id, $request);
+        if($file)
+        {
+            $imageName = rand().'.'.$file->getClientOriginalExtension();
+
+            $file->move(public_path().'/profile_images/',$imageName);
+
+            $data['picture'] = $imageName;
+        }
+        User::find($id)->update($data);
+
+        $user = User::find($id);
+
+        $role = Role::find($request->role_id);
+
+        // dd($role);
+
+        $user->assignRole($role);
+
+        Toastr::success('User Updated', 'Success');
+        return redirect()->back();
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        return $this->user->delete($user->id);
+
+        User::find($id)->delete();
+        Toastr::success('User Deleted', 'Success');
+        return redirect()->back();
     }
 
     public function restore($id)
     {
-        return $this->user->restore($id);
+        User::where('id',$id)->restore();
+        Toastr::success('User Restored', 'Success');
+        return redirect()->back();
     }
 
     public function forceDelete($id)
     {
-        return $this->user->forceDelete($id);
+        $pathImage = User::where('id',$id)->withTrashed()->first();
+
+            $path = public_path().'/profile_images/'.$pathImage->picture;
+
+            if(file_exists($path))
+            {
+                unlink($path);
+            }
+
+        User::where('id',$id)->withTrashed()->forceDelete();
+        Toastr::success('User Permenantly Deleted', 'Success');
+        return redirect()->back();
     }
 
     /*public function permission($id)
@@ -210,7 +269,27 @@ class UserController extends Controller
 
     public function changePassword(ChangePasswordRequest $request)
     {
-        return $this->user->changePassword($request, $request->user_id);
+        // return $this->user->changePassword($request, $request->user_id);
+
+        // dd($request->all());
+
+        $user = User::find($request->user_id);
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withInput()->withErrors('Current Password Wrong');
+            }
+
+            if ($request->password) {
+                $user->update([
+                    'password' => Hash::make($request->password)
+                ]);
+            } else {
+                return back()->withInput()->withErrors('Password not found');
+            }
+
+            \Toastr::success('Password Updated', 'Success');
+            return redirect()->back();
+
     }
 
     public function status(Request $request)
