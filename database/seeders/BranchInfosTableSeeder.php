@@ -31,7 +31,7 @@ class BranchInfosTableSeeder extends Seeder
                 'created_at' => NULL,
                 'deleted_at' => NULL,
                 'id' => 1,
-                'official_contact _no' => '+88845646512',
+                'official_contact_no' => '+88845646512',
                 'sl' => 1,
                 'status' => 1,
                 'updated_at' => NULL,

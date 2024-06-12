@@ -61,6 +61,7 @@ use App\Http\Controllers\SalesProfitController;
 use App\Http\Controllers\ProfitReportController;
 use App\Http\Controllers\AssetInvestController;
 use App\Http\Controllers\AssetReportController;
+use App\Http\Controllers\BranchInfoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -273,7 +274,12 @@ Route::group(['middleware' => 'auth'], function () {
         'asset_invest' => AssetInvestController::class,
         'asset_report' => AssetReportController::class,
         'financial_statement' => FinancialStatementController::class,
+        'branch_info' => BranchInfoController::class,
     ]);
+
+    Route::post('changeBranchStatus',[BranchInfoController::class,'changeBranchStatus']);
+    Route::get('retrive_branch_info/{id}',[BranchInfoController::class,'retrive_branch_info']);
+    Route::get('branch_info_per_delete/{id}',[BranchInfoController::class,'branch_info_per_delete']);
 
     Route::get('show_asset_report',[AssetReportController::class,'show_asset_report']);
 
