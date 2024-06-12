@@ -91,7 +91,7 @@ class BankTransController extends Controller
     public function withdraw_cc_loan()
     {
         $data = [];
-        $data['bank'] = bank_info::where('account_type','CC Loan')->get();
+        $data['bank'] = bank_info::where('account_type','CC Loan')->where('bank_transactions.branch_id',Auth::user()->branch)->get();
         return view('inventory.bank.withdraw_cc_loan',compact('data'));
     }
 

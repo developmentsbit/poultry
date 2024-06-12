@@ -20,6 +20,7 @@ class InternalLoanProvide extends Controller
     {
         if ($request->ajax()) {
             $data = internal_loan_provide::leftjoin('internal_loan_registers','internal_loan_registers.id','internal_loan_provides.register_id')
+            ->where('internal_loan_provides.branch',Auth::user()->branch)
             ->select('internal_loan_provides.*','internal_loan_registers.name')
             ->get();
             return Datatables::of($data)->addIndexColumn()

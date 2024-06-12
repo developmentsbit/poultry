@@ -20,6 +20,7 @@ class LoanProvideController extends Controller
     {
         if ($request->ajax()) {
             $data = loan_provide::leftjoin('loan_registers','loan_registers.id','loan_provides.register_id')
+            ->where('loan_provides.branch',Auth::user()->branch)
             ->select('loan_provides.*','loan_registers.name')
             ->get();
             return Datatables::of($data)->addIndexColumn()

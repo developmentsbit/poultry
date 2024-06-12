@@ -18,6 +18,7 @@ class SalarySetupController extends Controller
     public function index()
     {
         $data = employee_salary_setup::leftjoin('employee_infos','employee_infos.id','employee_salary_setups.employee_id')
+                ->where('employee_salary_setups.branch_id',Auth::user()->branch)
                 ->select('employee_salary_setups.*','employee_infos.name')
                 ->get();
         return view('inventory.salary_setup.index',compact('data'));

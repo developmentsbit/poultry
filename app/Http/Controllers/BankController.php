@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\bank_info;
+use Auth;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use DataTables;
 
@@ -16,7 +17,7 @@ class BankController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = bank_info::get();
+            $data = bank_info::where('bank_infos.branch_id',Auth::user()->branch)->get();
             return Datatables::of($data)->addIndexColumn()
             ->addColumn('action', function($row){
                 $btn = '<div class="dropdown">

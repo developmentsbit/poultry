@@ -17,7 +17,7 @@ class InvestorRegistration extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = loan_register::get();
+            $data = loan_register::where('loan_registers.branch',Auth::user()->branch)->get();
             return Datatables::of($data)->addIndexColumn()
             ->addColumn('sl',function($row){
                 $i = 1;

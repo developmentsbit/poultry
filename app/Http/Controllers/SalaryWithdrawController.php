@@ -20,6 +20,7 @@ class SalaryWithdrawController extends Controller
     {
         if ($request->ajax()) {
             $data = employee_salary_payment::leftjoin('employee_infos','employee_infos.id','employee_salary_payments.employee_id')
+            ->where('employee_salary_payments.branch_id',Auth::user()->branch)
             ->select('employee_salary_payments.*','employee_infos.name')
             ->where('employee_salary_payments.salary_withdraw','!=',NULL)
             ->get();
