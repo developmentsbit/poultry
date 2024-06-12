@@ -17,7 +17,7 @@ class InternalLoanRegister extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = internal_loan_register::get();
+            $data = internal_loan_register::where('internal_loan_registers.branch',Auth::user()->branch)->get();
             return Datatables::of($data)->addIndexColumn()
             ->addColumn('sl',function($row){
                 $i = 1;

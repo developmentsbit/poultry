@@ -19,6 +19,7 @@ class BankTransactionController extends Controller
     {
         if ($request->ajax()) {
             $data = bank_transaction::leftjoin('bank_infos','bank_infos.id','bank_transactions.account_id')
+                    ->where('bank_transactions.branch_id',Auth::user()->branch)
                     ->select('bank_transactions.*','bank_infos.bank_name','bank_infos.account_number','bank_infos.account_type')
                     ->get();
             return Datatables::of($data)->addIndexColumn()

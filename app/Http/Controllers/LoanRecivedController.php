@@ -19,6 +19,7 @@ class LoanRecivedController extends Controller
     {
         if ($request->ajax()) {
             $data = loan_recived::leftjoin('loan_registers','loan_registers.id','loan_reciveds.register_id')
+            ->where('loan_reciveds.branch',Auth::user()->branch)
             ->select('loan_reciveds.*','loan_registers.name')
             ->get();
             return Datatables::of($data)->addIndexColumn()

@@ -17,7 +17,7 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = employee_info::get();
+            $data = employee_info::where('employee_infos.branch',Auth::user()->branch)->get();
             return Datatables::of($data)->addIndexColumn()
             ->addColumn('contact',function($row){
                 return '<span>Phone: '.$row->phone.'</span><br>
@@ -96,6 +96,7 @@ class EmployeeController extends Controller
             "email" => $request->email,
             "nid_no" => $request->nid_no,
             "joining_date" => $request->joining_date,
+            'branch'     => Auth()->user()->branch,
             "address" => $request->address,
             'image'=>'0',
             'nid_image'=>'0',
@@ -159,6 +160,7 @@ class EmployeeController extends Controller
             "email" => $request->email,
             "nid_no" => $request->nid_no,
             "joining_date" => $request->joining_date,
+            'branch'     => Auth()->user()->branch,
             "address" => $request->address,
         );
 
