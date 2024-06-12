@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('branch_address_en')->nullable();
             $table->text('branch_address_bn')->nullable();
             $table->string('branch_email',100)->nullable();
-            $table->string('official_contact _no',30)->nullable();
+            $table->string('official_contact_no',30)->nullable();
             $table->integer('status')->comment('1=Active & 0 = Inactive')->default(1);
             $table->date('deleted_at')->nullable();
             $table->timestamps();
