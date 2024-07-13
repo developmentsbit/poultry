@@ -276,6 +276,8 @@ Route::group(['middleware' => 'auth'], function () {
         'financial_statement' => FinancialStatementController::class,
         'branch_info' => BranchInfoController::class,
     ]);
+    Route::get('/customer_due_report',[CustomerController::class,'customer_due_report']);
+    Route::get('show_financial_statement',[FinancialStatementController::class,'show_report']);
 
     Route::post('changeBranchStatus',[BranchInfoController::class,'changeBranchStatus']);
     Route::get('retrive_branch_info/{id}',[BranchInfoController::class,'retrive_branch_info']);

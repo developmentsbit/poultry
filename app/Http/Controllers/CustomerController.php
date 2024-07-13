@@ -371,4 +371,10 @@ class CustomerController extends Controller
         Toastr::success('Customer Permenantly Delete Successfullly', 'Success');
             return redirect()->back();
     }
+
+    public function customer_due_report()
+    {
+        $customer = customer_info::get();
+        return view('inventory.customer.show_due_report',compact('customer'));
+    }
 }
