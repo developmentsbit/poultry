@@ -7,6 +7,7 @@ use App\Models\asset_category;
 use App\Traits\Date;
 use App\Models\asset_cost;
 use Brian2694\Toastr\Facades\Toastr;
+use Auth;
 
 class AssetCostController extends Controller
 {
@@ -21,7 +22,7 @@ class AssetCostController extends Controller
      */
     public function index()
     {
-        $data = asset_cost::with('title')->get();
+        $data = asset_cost::where('branch_id',Auth::user()->branch)->with('title')->get();
         $i = 1;
         return view($this->path.'.index',compact('data','i'));
     }
@@ -45,6 +46,7 @@ class AssetCostController extends Controller
             'date' => $date,
             'title_id' => $request->title_id,
             'amount' => $request->amount,
+            'branch_id' => Auth::user()->branch,
         );
         asset_cost::create($data);
         Toastr::success('Asset Cost Created', 'Success');

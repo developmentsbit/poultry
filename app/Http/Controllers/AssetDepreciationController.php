@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\asset_category;
 use App\Models\asset_depreciation;
+use Auth;
 
 class AssetDepreciationController extends Controller
 {
@@ -19,7 +20,7 @@ class AssetDepreciationController extends Controller
      */
     public function index()
     {
-        $data = asset_depreciation::with('title')->get();
+        $data = asset_depreciation::where('branch_id',Auth::user()->branch)->with('title')->get();
         return view($this->path.'.index',compact('data'));
     }
 
@@ -37,10 +38,13 @@ class AssetDepreciationController extends Controller
      */
     public function store(Request $request)
     {
+        $date = Date::DateToDb('/',$request->date);
         $data = array(
+            'date' => $date,
             'title_id' => $request->title_id,
             'depreciation_value' => $request->depreciation_value,
             'details' => $request->details,
+            'branch_id' => Auth::user()->branch,
         );
 
         asset_depreciation::create($data);

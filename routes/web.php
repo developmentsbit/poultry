@@ -276,6 +276,10 @@ Route::group(['middleware' => 'auth'], function () {
         'financial_statement' => FinancialStatementController::class,
         'branch_info' => BranchInfoController::class,
     ]);
+
+    Route::get('cash_asset',[AssetInvestController::class,'cash_asset'])->name('cash_asset.index');
+    Route::post('cash_asset_store',[AssetInvestController::class,'cash_asset_store'])->name('cash_asset.store');
+
     Route::get('/customer_due_report',[CustomerController::class,'customer_due_report']);
     Route::get('show_financial_statement',[FinancialStatementController::class,'show_report']);
 

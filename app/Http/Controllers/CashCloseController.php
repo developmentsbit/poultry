@@ -21,6 +21,8 @@ use App\Models\employee_salary_payment;
 use Brian2694\Toastr\Facades\Toastr;
 use Auth;
 use DateTime;
+use App\Models\asset_invest;
+use App\Models\asset_cost;
 
 class CashCloseController extends Controller
 {
@@ -87,7 +89,9 @@ class CashCloseController extends Controller
 
         $supplier_loans = $supplier_loan * -1;
 
-        $total_income = $previous_cash + $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived + $supplier_loans;
+        $cash_invest = asset_invest::whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->where('title_id',2)->sum('amount');
+
+        $total_income = $previous_cash + $customer_payment + $purchase_return + $bank_withdraw + $bank_interest + $income + $loan_recived + $internal_loan_recived + $supplier_loans + $cash_invest;
 
 
         /// expense
@@ -111,8 +115,17 @@ class CashCloseController extends Controller
         $salary = employee_salary_payment::whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->sum('salary_withdraw');
         $customer_loans = $customer_loan * -1;
 
-        $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary + $customer_loans;
+        $asset_invest = asset_invest::whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->where('title_id','!=',2)->sum('amount');
 
+        $total_expense = $supplier_payment + $expense + $sales_return + $bank_deposit + $bank_acc_cost + $loan_provide + $internal_loan_provide + $salary + $customer_loans+$asset_invest;
+
+
+            //asset
+
+        $asset_withdraw  = asset_cost::whereBetween('date',[$last_cash_date,$today_date])->where('branch_id',Auth::user()->branch)->where('title_id','!=',2)->sum('amount');
+
+
+        $current_asset = $asset_invest - $asset_withdraw;
 
         $bankbalance =  ($bank_deposit + $bank_acc_cost) - ($bank_withdraw + $bank_interest) ;
 
@@ -120,7 +133,7 @@ class CashCloseController extends Controller
         $cash_in_hand = $cash - $bankbalance;
 
 
-        return view('inventory.cash.index',compact('previous_cash','customer_payment','purchase_return','bank_withdraw','bank_interest','income','loan_recived','expense','supplier_payment','internal_loan_recived','total_income','sales_return','bank_deposit','bank_acc_cost','loan_provide','internal_loan_provide','salary','total_expense','bankbalance','cash','cash_in_hand','today_cash','last_cash_date','today_date','customer_loans','supplier_loans'));
+        return view('inventory.cash.index',compact('previous_cash','customer_payment','purchase_return','bank_withdraw','bank_interest','income','loan_recived','expense','supplier_payment','internal_loan_recived','total_income','sales_return','bank_deposit','bank_acc_cost','loan_provide','internal_loan_provide','salary','total_expense','bankbalance','cash','cash_in_hand','today_cash','last_cash_date','today_date','customer_loans','supplier_loans','cash_invest','asset_invest','asset_withdraw','current_asset'));
     }
 
     /**
@@ -142,6 +155,7 @@ class CashCloseController extends Controller
             'cash_date'=>date('Y-m-d'),
             'cash'=>$request->cash,
             'bankbalance'=>$request->bankbalance,
+            'current_asset'=>$request->current_asset,
             'comment'=>$request->comment,
             'admin_id'=>Auth::user()->id,
             'branch_id' =>Auth::user()->branch,
@@ -156,6 +170,7 @@ class CashCloseController extends Controller
             'purchase_return'=>$request->purchase_return,
             'loan_recived'=>$request->loan_recived,
             'intloan_recived'=>$request->intloan_recived,
+            'cash_invest' => $request->cash_invest,
             'admin_id'=>Auth::user()->id,
             'branch_id' => Auth::user()->branch,
         ]);
@@ -170,7 +185,9 @@ class CashCloseController extends Controller
             'loan_provide'=>$request->loan_provide,
             'intloan_provide'=>$request->intloan_provide,
             'customer_loan' => $request->customer_loan,
-            'branch_id' => Auth::user()->branch,
+            'asset_invest' => $request->asset_invest,
+            'asset_withdraw' => $request->asset_withdraw,
+            'branch_id' =>  Auth::user()->branch,
         ]);
 
 
