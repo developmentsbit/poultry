@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreign('title_id')->references('id')->on('asset_categories');
             $table->double('amount',10,2)->default('0.00');
             $table->text('comment')->nullable();
+            $table->bigInteger('branch_id')->unsigned();
+            $table->foreign('branch_id')->references('id')->on('branch_infos');
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

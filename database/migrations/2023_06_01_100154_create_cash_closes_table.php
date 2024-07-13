@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('cash_date')->nullable();
             $table->double('cash',10,2)->nullable();
             $table->text('bankbalance')->nullable();
+            $table->text('current_asset')->nullable();
             $table->text('comment')->nullable();
             $table->integer('admin_id')->nullable();
             $table->integer('branch_id')->nullable();

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->double('intloan_provide',10,2)->nullable();
             $table->double('salary_payment',10,2)->nullable();
             $table->double('customer_loan',10,2)->nullable();
+            $table->double('asset_invest',10,2)->nullable();
+            $table->double('asset_withdraw',10,2)->nullable();
             $table->integer('admin_id')->nullable();
             $table->integer('branch_id')->nullable();
             $table->timestamps();

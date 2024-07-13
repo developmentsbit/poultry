@@ -8,6 +8,7 @@ use App\Models\asset_invest;
 use App\Models\asset_cost;
 use App\Traits\Date;
 use Brian2694\Toastr\Facades\Toastr;
+use Auth;
 
 class AssetInvestController extends Controller
 {
@@ -27,7 +28,7 @@ class AssetInvestController extends Controller
      */
     public function index()
     {
-        $data = asset_invest::with('title')->get();
+        $data = asset_invest::where('branch_id',Auth::user()->branch)->with('title')->get();
         return $this->path('index',$data);
     }
 
@@ -36,7 +37,7 @@ class AssetInvestController extends Controller
      */
     public function create()
     {
-        $title = asset_category::all();
+        $title = asset_category::where('status',1)->get();
         return $this->path('create','',$title);
     }
 
@@ -51,6 +52,7 @@ class AssetInvestController extends Controller
             'title_id' => $request->title_id,
             'amount' => $request->amount,
             'comment' => $request->comment,
+            'branch_id' => Auth::user()->branch,
         );
 
         asset_invest::create($data);
@@ -116,5 +118,32 @@ class AssetInvestController extends Controller
         asset_invest::where('id',$id)->withTrashed()->forceDelete();
         Toastr::success('Asset Invest Deleted', 'Success');
         return redirect()->back();
+    }
+
+    public function cash_asset()
+    {
+        return view('inventory.cash_asset.create');
+    }
+
+    public function cash_asset_store(Request $request)
+    {
+        // return $request;
+        $date = Date::DateToDb('/',$request->date);
+        $data = array(
+            'date' => $date,
+            'title_id' => 2,
+            'amount' => $request->amount,
+            'comment' => $request->comment,
+            'branch_id' => Auth::user()->branch,
+        );
+
+        asset_invest::create($data);
+        Toastr::success('Cash Asset Invest Created', 'Success');
+        return redirect()->back();
+    }
+
+    public function cash_asset_index()
+    {
+
     }
 }

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->double('depreciation_value')->default('0.00');
             $table->text('details');
             $table->date('deleted_at')->nullable();
+            $table->bigInteger('branch_id')->unsigned();
+            $table->foreign('branch_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

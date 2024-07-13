@@ -97,6 +97,14 @@
                                     <input type="hidden" name="supplier_loan" value="{{ $supplier_loans }}">
                                 </div>
                                 <div class="list-item-sl">
+                                    <span>Cash Invest </span> <span class="text-right" style="">
+                                        <a href="{{ url('cash_invest_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $cash_invest }}/-
+                                        </a>
+                                    </span>
+                                    <input type="hidden" name="cash_invest" value="{{ $cash_invest }}">
+                                </div>
+                                <div class="list-item-sl">
                                     <b>Total Income </b> <b class="text-right" style="">{{ $total_income }}/-</b>
                                     <input type="hidden" name="total_income" value="{{ $total_income }}">
                                 </div>
@@ -182,6 +190,14 @@
                                     <input type="hidden" value="{{ $customer_loans }}" name="customer_loan">
                                 </div>
                                 <div class="list-item-sl">
+                                    <span>Asset Invest </span> <span class="text-right" style="">
+                                        <a href="{{ url('asset_invest_details') }}/{{ $last_cash_date }}/{{ $today_date }}" target="_blank">
+                                            {{ $asset_invest }}/-
+                                        </a>
+                                    </span>
+                                    <input type="hidden" value="{{ $asset_invest }}" name="asset_invest">
+                                </div>
+                                <div class="list-item-sl">
                                     <b>Total Expense </b> <b class="text-right" style="">{{$total_expense}}/-</b>
                                     <input type="hidden" name="total_exense" value="{{$total_expense}}">
                                 </div>
@@ -205,6 +221,45 @@
 
                                     <td>
                                         {{ $cash }} /-
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <div class="row">
+                                <div class="col-6 p-3" id="detailsbox">
+                                    <b>Bank Balance</b><br>
+
+                                    <span>{{ $bankbalance }}/-</span>
+
+                                    <input type="hidden" name="bankbalance" value="{{$bankbalance}}">
+                                </div>
+                                <div class="col-6 p-3" id="detailsbox">
+                                    <b>Cash In Hand</b><br>
+                                    {{ $cash_in_hand }}
+
+                                    <input type="hidden" name="cash" value="{{$cash_in_hand}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 w-100 bg-dark p-2 text-white text-center mt-2">
+                            Asset Calculation
+                        </div>
+
+                        <div class="col-12 mt-2">
+                            <table class="table table-striped table-bordered">
+                                <tr>
+                                    <th>Asset Invest</th>
+                                    <th>Asset Withdraw</th>
+                                    <th>Current Asset</th>
+                                </tr>
+                                <tr>
+                                    <td> {{ $asset_invest }}/-</td>
+                                    <td> {{ $asset_withdraw }}/-
+                                        <input type="hidden" name="asset_withdraw" id="asset_withdraw" value="{{ $asset_withdraw }}">
+                                    </td>
+
+                                    <td>
+                                        {{ $current_asset }} /-
                                     </td>
                                 </tr>
 
