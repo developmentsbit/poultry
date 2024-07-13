@@ -37,8 +37,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-
-                    <h4 class="header-title">@lang('customer.index_title')</h4>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="header-title">@lang('customer.index_title')</h4>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <a href="{{ url('customer_due_report') }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> Customer Due Report</a>
+                        </div>
+                    </div>
                     <ul class="nav nav-tabs nav-bordered mb-3">
                         <li class="nav-item">
                             <a href="#roles-tab-all" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">

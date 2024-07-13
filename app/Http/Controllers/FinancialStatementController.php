@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\sales_ledger;
+use App\Models\sales_payment;
+
 
 class FinancialStatementController extends Controller
 {
@@ -65,5 +68,12 @@ class FinancialStatementController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function show_report(Request $request)
+    {
+        // return $request->all();
+        $total_sales = sales_ledger::whereMonth('invoice_date',$request->month)->whereYear('invoice_date',$request->year)->sum('total');
+        return view($this->path.'.show_report');
     }
 }

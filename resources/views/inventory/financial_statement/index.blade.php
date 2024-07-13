@@ -26,7 +26,7 @@
 		<div class="card">
 			<div class="card-body">
                 <h4>Financial Statement</h4><br>
-                <form method="get" target="_blank" action="show_financial_statement">
+                <form method="get" target="_blank" action="{{url("show_financial_statement")}}">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12 mt-2">
                             <label for="category">Report Type</label>
